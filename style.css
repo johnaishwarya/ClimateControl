@@ -1,0 +1,138 @@
+.front-page-both {
+  display: flex;
+  height: 1024px;
+  align-items: center;
+  gap: 181px;
+  position: relative;
+  background-color: #3f5843;
+  width: 100%;
+  min-width: 1440px;
+}
+
+.front-page-both .frame {
+  display: flex;
+  flex-direction: column;
+  width: 700px;
+  height: 1024px;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 361px 132px;
+  position: relative;
+  background-image: url(./img/frame-29.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.front-page-both .text-wrapper {
+  position: relative;
+  width: 409px;
+  height: 44px;
+  text-shadow: 0px 4px 4px #00000040;
+  -webkit-text-stroke: 1px #000000;
+  font-family: "Poppins", Helvetica;
+  font-weight: 100;
+  font-style: italic;
+  color: #000000;
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.front-page-both .frame-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 492px;
+  height: 584px;
+  align-items: center;
+  position: relative;
+}
+
+.front-page-both .div {
+  display: flex;
+  flex-direction: column;
+  width: 492px;
+  height: 406.84px;
+  align-items: flex-start;
+  gap: 160px;
+  position: relative;
+}
+
+.front-page-both .welcome-back {
+  position: relative;
+  width: 402.82px;
+  height: 46.9px;
+}
+
+.front-page-both .frame-2 {
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  height: 188.84px;
+  align-items: center;
+  gap: 51px;
+  position: relative;
+}
+
+.front-page-both .overlap-group-wrapper {
+  position: relative;
+  width: 420px;
+  height: 68.47px;
+}
+
+.front-page-both .overlap-group {
+  position: relative;
+  width: 420px;
+  height: 68px;
+  border-radius: 10px;
+}
+
+.front-page-both .rectangle {
+  position: absolute;
+  width: 420px;
+  height: 68px;
+  top: 0;
+  left: 0;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 0px 4px 64px #0000000d;
+}
+
+.front-page-both .text-wrapper-2 {
+  position: absolute;
+  width: 68px;
+  top: 18px;
+  left: 188px;
+  font-family: "Poppins", Helvetica;
+  font-weight: 700;
+  color: #3f5843;
+  font-size: 17px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.front-page-both .div-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  height: 68.47px;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0px 148.91px;
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 64px #0000000d;
+}
+
+.front-page-both .text-wrapper-3 {
+  position: relative;
+  width: 95.45px;
+  height: 30.41px;
+  font-family: "Poppins", Helvetica;
+  font-weight: 700;
+  color: #3f5843;
+  font-size: 17px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
