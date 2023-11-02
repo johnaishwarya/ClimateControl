@@ -209,6 +209,7 @@
 
         signOutButton.addEventListener('click', userSignOut);
     </script>
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
 </head>
 <body>
     <script src="app.js"></script>
@@ -218,85 +219,92 @@
         <!-- Modal content -->
         <div class="modal-content">
           <span class="close" onclick="closeWindowOpen(this)">&times;</span>
-          <h1>Input Categories</h1>
-            <table>
-                <tr>
-                    <th>Category Name</th>
-                    <th>Scoring Type</th>
-                    <th>Weight</th>
-                    <th>Direction to Optimize</th>
-                    <th>Action</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="category_name[]"></td>
-                    <td>
-                        <select name="scoring_type[]">
-                            <option value="number">Number</option>
-                            <option value="descriptive">Descriptive</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="number" step="0.01" name="weight[]" placeholder="Remaining: 1.00" oninput="updateRemainingWeight(this)">
-                        <span class="error-message" style="font-size: 10px;"></span>
-                    </td>
-                    <td>
-                        <select name="direction_to_optimize[]">
-                            <option value="up">Up</option>
-                            <option value="down">Down</option>
-                        </select>
-                    </td>
-                    <td>
-                        <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-                        <span class="clear-icon" onclick="clearRow(this)">🔄</span>
-                    </td>
-                </tr>
-            </table>
-            <div class="add-button">
-                <button onclick="addCategoryRow()">Add Category</button>
+          <div class="firstModalPage" id="firstModalPage"> 
+            <h1>Input Categories</h1>
+                <table>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Scoring Type</th>
+                        <th>Weight</th>
+                        <th>Direction to Optimize</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="category_name[]"></td>
+                        <td>
+                            <select name="scoring_type[]">
+                                <option value="number">Number</option>
+                                <option value="descriptive">Descriptive</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="weight[]" placeholder="Remaining: 1.00" oninput="updateRemainingWeight(this)">
+                            <span class="error-message" style="font-size: 10px;"></span>
+                        </td>
+                        <td>
+                            <select name="direction_to_optimize[]">
+                                <option value="up">Up</option>
+                                <option value="down">Down</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+                            <span class="clear-icon" onclick="clearRow(this)">🔄</span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="add-button">
+                    <button onclick="addCategoryRow()">Add Category</button>
+                </div>
+                
+                <h1>Input Scenarios</h1>
+                <table>
+                    <tr>
+                        <th>Scenario Name</th>
+                        <!-- <th>Scenario Value</th> -->
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="scenario_name[]"></td>
+                        <!-- <td><input type="number" step="0.01" name="scenario_value[]"></td> -->
+                        <td>
+                            <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+                            <span class="clear-icon" onclick="clearRow(this)">🔄</span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="add-button">
+                    <button onclick="addScenarioRow()">Add Scenario</button>
+                </div>
+
+                <div class="submit-button">
+                    <button type="submit" onclick="valueTable()">Continue</button>
+                </div>
+
+                <div id="table-container"></div>
+
+                <div class="submit-button">
+                    <button id="temp-submit-button" type="submit" onclick="calculateScore()" style="display: none;">Submit</button>
+                </div>
+            </div>
+            <div class="secondModalPage" id="secondModalPage" style="display: none;">
+                <div id='chart' ><!-- Plotly chart will be drawn inside this DIV --></div>
+                <button type="submit" onclick="backToFirstModalPage()">Back</button>
+                <button type="submit">Save</button>
             </div>
             
-            <h1>Input Scenarios</h1>
-            <table>
-                <tr>
-                    <th>Scenario Name</th>
-                    <!-- <th>Scenario Value</th> -->
-                    <th>Action</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="scenario_name[]"></td>
-                    <!-- <td><input type="number" step="0.01" name="scenario_value[]"></td> -->
-                    <td>
-                        <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-                        <span class="clear-icon" onclick="clearRow(this)">🔄</span>
-                    </td>
-                </tr>
-            </table>
-            <div class="add-button">
-                <button onclick="addScenarioRow()">Add Scenario</button>
-            </div>
-
-            <div class="submit-button">
-                <button type="submit" onclick="valueTable()">Continue</button>
-            </div>
-
-            <div id="table-container"></div>
-
-            <div class="submit-button">
-                <button id="temp-submit-button" type="submit" onclick="calculateScore()" style="display: none;">Submit</button>
-            </div>
         </div>
       
     </div>
     <div style="padding: 10%;display: flex;justify-content: space-between; gap: 10%; padding: 10% 35%;">
         <button id="myBtn" onclick="modalWindowOpen(this)" class="button-4">New</button>
-        <button class="button-4">Open</button>
+        <button class="button-4" onclick="openMe(this)">Open</button>
     </div>  
     <div id="signOut" style="padding: 5% 10%;">
         <button id="signOutButton" class="button-4">Sign Out</button>
     </div>
 
-
-
     
+
 </body>
 </html>

@@ -158,8 +158,17 @@ function getValuesTableData(){
         // Add the scenario data to the values array
         values.push(scenario);
     }
-    console.log(values);
-    return values;
+
+    var updatedValuesData = [];
+    var scenarioData = getScenarioData();
+
+    for (var i = 0; i < scenarioData.length; i++) {
+        var scenarioName = scenarioData[i].scenarioName;
+        var data = values[i].data;
+        updatedValuesData.push({ [scenarioName]: data });
+    }
+
+    return updatedValuesData;
 }
 
 
@@ -243,12 +252,169 @@ function valueTable(){
 
 }
 
-function calculateScore(){
-    var categoryData = getCategoryData(); 
+function calculateScore() {
+    var categoryData = getCategoryData();
     var scenarioData = getScenarioData();
     var valuesData = getValuesTableData();
-    
+    var dimensionlessScores = {};
 
+    console.log(categoryData)
+    console.log(scenarioData)
+    console.log(valuesData)
+
+    for (var category of categoryData) {
+        var categoryName = category.categoryName;
+        var categoryWeight = category.weight;
+        var directionToOptimize = category.directionToOptimize;
+        console.log("categoryName: ", categoryName);
+        console.log("categoryWeight: ", categoryWeight);
+        console.log("directionToOptimize: ", directionToOptimize);
+
+        
+        
+
+        // Find min and max values for the category
+        var min = Number.MAX_VALUE;
+        var max = Number.MIN_VALUE;
+        var i=0;
+        for (var scenario of valuesData) {
+            
+            var s = scenario[scenarioData[0].scenarioName];
+
+            // console.log("Values: ", s[categoryName]);
+            var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
+            if (!isNaN(value)) {
+                if (value < min) {
+                    min = value;
+                }
+                if (value > max) {
+                    max = value;
+                }
+            }
+            i++;
+        }
+        
+        console.log("min: ", min, " max :", max);
+
+        // Calculate linear scores for each scenario in this category
+        for (var scenario of scenarioData) {
+            var scenarioName = scenario.scenarioName;
+            var value = parseFloat(valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName]);
+
+            if (!isNaN(value)) {
+                if (directionToOptimize === 'down') {
+                    // Minimize the linear score
+                    dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
+                    dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
+                } else if (directionToOptimize === 'up') {
+                    // Maximize the linear score
+                    dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
+                    dimensionlessScores[scenarioName][categoryName] = categoryWeight*((value - min) / (max - min));
+                }
+            }
+        }
+    }
+
+    // After calculation, the valuesData object now contains the calculated linear scores.
+    console.log(dimensionlessScores);
+    var firstModalPage = document.getElementById("firstModalPage");
+    var secondModalPage = document.getElementById("secondModalPage");
+    firstModalPage.style.display="none";
+    secondModalPage.style.display="block";
+    var totalScores = totalScoreForEachScenario(dimensionlessScores);
+    plot(totalScores);
+
+}
+
+
+function openMe(){
+    // var categoryData = [{categoryName: 'Emission', scoringType: 'number', weight: '0.3', directionToOptimize: 'up'}, {categoryName: 'Air', scoringType: 'number', weight: '0.4', directionToOptimize: 'up'}, {categoryName: 'Water', scoringType: 'number', weight: '0.3', directionToOptimize: 'down'}];
+    // var scenarioData = [{scenarioName: 'Bike'}, {scenarioName: 'Car'}, {scenarioName: 'Cycle'}];
+    // var valuesData = [{Bike: {Emission: '1000', Air: '43', Water: '65'}}, {Car:{Emission: '200', Air: '23', Water: '10'}}, {Cycle:{Emission: '-100', Air: '65', Water: '6'}}];
+    // var dimensionlessScores = {};
+
+    // console.log(categoryData)
+    // console.log(scenarioData)
+    // console.log(valuesData)
+
+    // for (var category of categoryData) {
+    //     var categoryName = category.categoryName;
+    //     var categoryWeight = category.weight;
+    //     var directionToOptimize = category.directionToOptimize;
+    //     console.log("categoryName: ", categoryName);
+    //     console.log("categoryWeight: ", categoryWeight);
+    //     console.log("directionToOptimize: ", directionToOptimize);
+
+        
+        
+
+    //     // Find min and max values for the category
+    //     var min = Number.MAX_VALUE;
+    //     var max = Number.MIN_VALUE;
+    //     var i=0;
+    //     for (var scenario of valuesData) {
+            
+    //         var s = scenario[scenarioData[0].scenarioName];
+
+    //         // console.log("Values: ", s[categoryName]);
+    //         var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
+    //         if (!isNaN(value)) {
+    //             if (value < min) {
+    //                 min = value;
+    //             }
+    //             if (value > max) {
+    //                 max = value;
+    //             }
+    //         }
+    //         i++;
+    //     }
+        
+    //     console.log("min: ", min, " max :", max);
+
+    //     // Calculate linear scores for each scenario in this category
+    //     for (var scenario of scenarioData) {
+    //         var scenarioName = scenario.scenarioName;
+    //         var value = parseFloat(valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName]);
+
+    //         if (!isNaN(value)) {
+    //             if (directionToOptimize === 'down') {
+    //                 // Minimize the linear score
+    //                 dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
+    //                 dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
+    //             } else if (directionToOptimize === 'up') {
+    //                 // Maximize the linear score
+    //                 dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
+    //                 dimensionlessScores[scenarioName][categoryName] = categoryWeight*((value - min) / (max - min));
+    //             }
+    //         }
+    //     }
+    // }
+
+    // // After calculation, the valuesData object now contains the calculated linear scores.
+    // console.log(dimensionlessScores);
+    // var totalScores = totalScoreForEachScenario(dimensionlessScores);
+    // plot(totalScores);
+
+    
+}
+
+function totalScoreForEachScenario(dimensionlessScores){
+    var totalscore = [];
+    for (var scenario in dimensionlessScores) {
+        if (dimensionlessScores.hasOwnProperty(scenario)) {
+            var sum = 0;
+
+            for (var category in dimensionlessScores[scenario]) {
+                if (dimensionlessScores[scenario].hasOwnProperty(category)) {
+                    sum += dimensionlessScores[scenario][category];
+                }
+            }
+
+            totalscore[scenario] = sum;
+        }
+    }
+    console.log("TotalScore: ", totalscore);
+    return totalscore;
 }
 
 
@@ -278,4 +444,32 @@ function closeWindowWhenClickedAnywhere(event) {
     if (event.target == modal) {
         modal.style.display = "none";
       }
+}
+
+
+function plot(totalScores){
+    const keys = Object.keys(totalScores);
+    console.log("Inplot: ", keys);
+    const values = Object.values(totalScores);
+    console.log("Inplot: ", values);
+    var chart = document.getElementById('chart');
+    var data = [
+        {
+          x: keys,
+          y: values,
+          type: 'bar'
+        }
+      ];
+    
+    //   var myDiv = document.getElementById("myDiv");
+      
+    Plotly.newPlot( chart, data);
+}
+
+function backToFirstModalPage(){
+    var firstModalPage = document.getElementById("firstModalPage");
+    var secondModalPage = document.getElementById("secondModalPage");
+    secondModalPage.style.display="none";
+    firstModalPage.style.display="block";
+    
 }

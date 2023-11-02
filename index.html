@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toodaloo</title>
     <link rel="stylesheet" href="styles.css">
-</head>
-<body>
     <script type="module">
         import {app, auth} from './auth.js';
         import { 
@@ -20,8 +18,6 @@
 
         const signInForm = document.getElementById('signInForm');
         const registerForm = document.getElementById('registerForm');
-        signInForm.style.display = 'block';
-        registerForm.style.display = 'none';
 
         const signInemail = document.getElementById("signInEmail");
         const signInpassword = document.getElementById("signInPassword"); 
@@ -221,6 +217,9 @@
                 });
         });
       </script>
+</head>
+<body>
+    
     
     <div class="container" id="login_container">
         <form id="signInForm">
@@ -236,14 +235,11 @@
                 <p id="passwordError"></p>
             </div>
             <button type="submit">Sign In</button>
-            <a onclick= "{
-                signInForm.style.display = 'none';
-                registerForm.style.display = 'block';
-            }">Don't have an account? Register</a>
+            <a onclick= "switchSigninAndReg(true)">Don't have an account? Register</a>
         </form>
 
         
-        <form id="registerForm">
+        <form id="registerForm" style="display: none;">
             <h1>Register</h1>
             <div class="form-group">
                 <label for="registerEmail">Email</label>
@@ -261,13 +257,21 @@
                 <p id="confirmPasswordErrorRegister"></p>
             </div>
             <button type="submit">Register</button>
-            <a onclick="{
-                signInForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            }">Already have an account? Sign In</a>
+            <a onclick="switchSigninAndReg(false)">Already have an account? Sign In</a>
         </form>
     </div>
 
+    <script>
+        function switchSigninAndReg(flag){
+            if(flag){
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }else{
+                signInForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            }
+        }
+    </script>
    
 
     
