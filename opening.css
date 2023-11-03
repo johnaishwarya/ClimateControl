@@ -1,0 +1,141 @@
+.opening-page {
+  background-color: #3f5843;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.opening-page .div {
+  background-color: #3f5843;
+  width: 1440px;
+  height: 643px;
+}
+
+.opening-page .frame {
+  display: inline-flex;
+  flex-direction: column;
+  height: 400px;
+  align-items: flex-start;
+  gap: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.opening-page .image {
+  position: relative;
+  width: 1280px;
+  height: 450px;
+  object-fit: cover;
+}
+
+.opening-page .text-wrapper {
+  position: absolute;
+  top: 400px;
+  left: 420px;
+  width: 593px;
+  text-shadow: 0px 4px 4px #00000040;
+  -webkit-text-stroke: 1px #000000;
+  font-family: "Poppins", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.opening-page .group {
+  position: absolute;
+  width: 515px;
+  top: 480px;
+  left: 370px;
+}
+
+.opening-page .overlap {
+  position: relative;
+}
+
+.opening-page .rectangle {
+  position: absolute;
+  width: 515px;
+  height: 250px;
+  top: 19px;
+  left: 0;
+  background-color: #3f5843;
+  border-radius: 15px;
+}
+
+.opening-page .overlap-group-wrapper {
+  position: absolute;
+  width: 422px;
+  height: 50px;
+  top: 0;
+  left: 58px;
+}
+
+.opening-page .overlap-group {
+  position: relative;
+  width: 420px;
+  height: 68px;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 64px #0000000d;
+}
+
+.opening-page .text-wrapper-2 {
+  position: absolute;
+  width: 68px;
+  top: 19px;
+  left: 180px;
+  font-family: "Poppins", Helvetica;
+  font-weight: 700;
+  color: #3f5843;
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.opening-page .group-2 {
+  position: absolute;
+  width: 424px;
+  top: 80px;
+  left: 58px;
+}
+
+.opening-page .div-wrapper {
+  position: absolute;
+  width: 420px;
+  height: 68px;
+  top: 0;
+  left: 0;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 64px #0000000d;
+}
+
+.opening-page .text-wrapper-3 {
+  position: absolute;
+  width: 95px;
+  top: 19px;
+  left: 176px;
+  font-family: "Poppins", Helvetica;
+  font-weight: 700;
+  color: #3f5843;
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.opening-page .text-wrapper-4 {
+  position: absolute;
+  width: 95px;
+  top: 140px;
+  left: 174px;
+  font-family: "Poppins", Helvetica;
+  font-weight: 700;
+  color: #3f5843;
+  font-size: 17px;
+  letter-spacing: 0;
+  line-height: normal;
+}
