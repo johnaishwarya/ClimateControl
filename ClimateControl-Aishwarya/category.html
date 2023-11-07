@@ -146,6 +146,41 @@
   word-wrap: break-word;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+}
+
+#background {
+    flex: 1;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+
+#buttons-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#buttons-container button {
+    width: 60%; /* Adjust the width as needed */
+    margin-bottom: 10px;
+}
+
+
+
 .button-4:hover {
   background-color: #F3F4F6;
   text-decoration: none;
@@ -296,14 +331,15 @@
         </div>
       
     </div>
-    <div style="padding: 10%;display: flex;justify-content: space-between; gap: 10%; padding: 10% 35%;">
-        <button id="myBtn" onclick="modalWindowOpen(this)" class="button-4">New</button>
-        <button class="button-4" onclick="openMe(this)">Open</button>
-    </div>  
-    <div id="signOut" style="padding: 5% 10%;">
-        <button id="signOutButton" class="button-4">Sign Out</button>
-    </div>
 
+    <div id="container">
+        <div id="background" style="background-image: url('frame-29.png');"></div>
+        <div id="buttons-container">
+            <button id="myBtn" onclick="modalWindowOpen(this)" class="button-4" style="width: 60%;height: 10%;">New</button>
+            <br><br>
+            <button class="button-4" onclick="openMe(this)" style="width: 60%;height: 10%;">Open</button>
+        </div>
+    </div>
     
 
 </body>
