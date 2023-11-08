@@ -243,7 +243,12 @@ function valueTable(){
         return;
     } 
 
-    
+    var totalCategoryWeight = calculateTotalWeight();
+
+    if (totalCategoryWeight < 1) {
+        alert('Total weight in the category table is less than 1. Cannot proceed.');
+        return;
+    }
 
     var table = document.createElement("table");
     var headerRow = table.insertRow(0);
