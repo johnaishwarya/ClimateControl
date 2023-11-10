@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toodaloo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="signin.css">
+</head>
+
+<body>
     <script type="module">
-        import {app, auth} from './auth.js';
-        import { 
+        import { app, auth } from './auth.js';
+        import {
             getAuth,
             createUserWithEmailAndPassword,
             signInWithEmailAndPassword,
@@ -18,18 +24,20 @@
 
         const signInForm = document.getElementById('signInForm');
         const registerForm = document.getElementById('registerForm');
+        signInForm.style.display = 'block';
+        registerForm.style.display = 'none';
 
         const signInemail = document.getElementById("signInEmail");
-        const signInpassword = document.getElementById("signInPassword"); 
+        const signInpassword = document.getElementById("signInPassword");
         const registerEmail = document.getElementById("registerEmail");
         const registerPassword = document.getElementById("registerPassword");
         const registerConfirmPassword = document.getElementById("registerConfirmPassword");
 
         // Function to validate the email
-        const validateEmail = (inputEmail)=> inputEmail.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        const validateEmail = (inputEmail) => inputEmail.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
         // Function to validate password
-        const validatePassword = (inputPassword) => inputPassword.value.match( /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/);
+        const validatePassword = (inputPassword) => inputPassword.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/);
         const emailError = document.getElementById("emailError");
         const passwordError = document.getElementById("passwordError");
         const emailErrorRegister = document.getElementById("emailErrorRegister");
@@ -38,242 +46,247 @@
 
 
         // Function used to display errors
-        const generateError = (errorName, errorMsg, sigInOrReg) =>{
-            if(sigInOrReg=="signIn"){
-                
-                if(errorName == "email"){
+        const generateError = (errorName, errorMsg, sigInOrReg) => {
+            if (sigInOrReg == "signIn") {
+
+                if (errorName == "email") {
                     emailError.innerText = errorMsg;
-                    emailError.style.color = "red"; 
-                }else if(errorName == "password"){
+                    emailError.style.color = "red";
+                } else if (errorName == "password") {
                     passwordError.innerText = errorMsg;
                     passwordError.style.color = "red";
                 }
             }
-            else if(sigInOrReg=="register"){
-                
-                if(errorName == "email"){ 
+            else if (sigInOrReg == "register") {
+
+                if (errorName == "email") {
                     emailErrorRegister.innerText = errorMsg;
-                    emailErrorRegister.style.color = "red";  
-                }else if(errorName == "password"){
+                    emailErrorRegister.style.color = "red";
+                } else if (errorName == "password") {
                     passwordErrorRegister.innerText = errorMsg;
                     passwordErrorRegister.style.color = "red";
-                } else if(errorName == "confirmPassword"){
+                } else if (errorName == "confirmPassword") {
                     confirmPasswordErrorRegister.innerText = errorMsg;
                     confirmPasswordErrorRegister.style.color = "red";
                 }
             }
-           
-            
+
+
         }
 
         // Focusout event listener. Triggers when the user clicks anywhere else besides the input
-        signInemail.addEventListener("focusout", (e)=>{
-            if(!validateEmail(signInemail)){
+        signInemail.addEventListener("focusout", (e) => {
+            if (!validateEmail(signInemail)) {
                 signInemail.style.borderColor = "red";
                 generateError("email", "Please enter a valid email", "signIn");
                 signInemail.parentElement.classList.add("error");
-            }else{
+            } else {
                 signInemail.style.borderColor = "black";
                 emailError.innerText = "";
             }
         });
 
         // Focusout event listener triggers when the user clicks anywhere else besides the input
-        signInpassword.addEventListener("focusout", (e)=>{
-            if(!validatePassword(signInpassword)){
+        signInpassword.addEventListener("focusout", (e) => {
+            if (!validatePassword(signInpassword)) {
                 signInpassword.style.borderColor = "red";
                 generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "signIn");
                 signInpassword.parentElement.classList.add("error");
-            }else{
+            } else {
                 signInpassword.style.borderColor = "black";
                 passwordError.innerText = "";
             }
         });
 
 
-        registerEmail.addEventListener("focusout", (e)=>{
-            if(!validateEmail(registerEmail)){
+        registerEmail.addEventListener("focusout", (e) => {
+            if (!validateEmail(registerEmail)) {
                 registerEmail.style.borderColor = "red";
                 generateError("email", "Please enter a valid email", "register");
                 registerEmail.parentElement.classList.add("error");
-            }else{
+            } else {
                 registerEmail.style.borderColor = "black";
                 emailErrorRegister.innerText = "";
             }
         });
 
         // Focusout event listener triggers when the user clicks anywhere else besides the input
-        registerPassword.addEventListener("focusout", (e)=>{
-            if(!validatePassword(registerPassword)){
+        registerPassword.addEventListener("focusout", (e) => {
+            if (!validatePassword(registerPassword)) {
                 registerPassword.style.borderColor = "red";
                 generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "register");
                 registerPassword.parentElement.classList.add("error");
-            }else{
+            } else {
                 registerPassword.style.borderColor = "black";
                 passwordErrorRegister.innerText = "";
             }
         });
 
         // Focusout event listener triggers when the user clicks anywhere else besides the input
-        registerConfirmPassword.addEventListener("focusout", (e)=>{
-            if(registerPassword.value != registerConfirmPassword.value){
+        registerConfirmPassword.addEventListener("focusout", (e) => {
+            if (registerPassword.value != registerConfirmPassword.value) {
                 registerConfirmPassword.style.borderColor = "red";
                 generateError("confirmPassword", "Password not identical", "register");
                 registerConfirmPassword.parentElement.classList.add("error");
-            }else{
+            } else {
                 registerConfirmPassword.style.borderColor = "black";
                 confirmPasswordErrorRegister.innerText = "";
             }
         });
 
-        const checkAuthState = async() => {
+        const checkAuthState = async () => {
             onAuthStateChanged(auth, user => {
-                if(user){
+                if (user) {
                     login_container.style.display = 'none';
                     window.location.href = "category.html";
                     // secretContent.style.display = 'block';
-                    
+
                 }
-                else{
+                else {
                     //signInForm.style.display = 'block';
                     login_container.style.display = 'block';
                     // secretContent.style.display = 'none';
-                    
+
                 }
             })
         }
 
         checkAuthState();
 
-        
+
         signInForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('signInEmail');
             const password = document.getElementById('signInPassword');
 
-       
-            if(!validateEmail(email)){
+
+            if (!validateEmail(email)) {
                 // alert('Please enter a valid email');
                 generateError("email", "Please enter a valid email", "signIn");
                 return;
             }
-            if(!validatePassword(password)){
+            if (!validatePassword(password)) {
                 // alert('Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character');
                 generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "signIn");
                 return;
             }
 
-            
+
             signInWithEmailAndPassword(auth, email.value, password.value)
                 .then((userCredential) => {
-                    
+
                     const user = userCredential.user;
                     alert('Sign in successful!');
                     window.location.href = "category.html";
-                    
+
                 })
                 .catch((error) => {
-                    
+
                     const errorMessage = "Email Id or password is incorrect!";
                     alert(`Sign in failed: ${errorMessage}`)
-                    generateError("password",errorMessage);
+                    generateError("password", errorMessage);
                 });
         });
 
-       
-        
+
+
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('registerEmail');
             const password = document.getElementById('registerPassword');
             const confirmPassword = document.getElementById('registerConfirmPassword');
 
-            if(!validateEmail(email)){
+            if (!validateEmail(email)) {
                 // alert('Please enter a valid email');
                 generateError("email", "Please enter a valid email", "register");
                 return;
             }
-            if(!validatePassword(password)){
+            if (!validatePassword(password)) {
                 // alert('Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character');
                 generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "register");
                 return;
             }
-            if(password.value != confirmPassword.value){
+            if (password.value != confirmPassword.value) {
                 generateError("confirmPassword", "Password not identical", "register")
                 return
             }
-            
+
             createUserWithEmailAndPassword(auth, email.value, confirmPassword.value)
                 .then((userCredential) => {
-                    
+
                     const user = userCredential.user;
                     alert('Registration successful!');
-                    
+
                 })
                 .catch((error) => {
-                   
+
                     const errorMessage = "Error - Email already exists";
-                    generateError("password",errorMessage, "register");
+                    generateError("password", errorMessage, "register");
                 });
         });
-      </script>
-</head>
-<body>
-    
-    
-    <div class="container" id="login_container">
-        <form id="signInForm">
-            <h1>Sign In</h1>
-            <div class="form-group">
-                <label for="signInEmail">Email</label>
-                <input type="email" id="signInEmail" required>
-                <p id="emailError"></p>
-            </div>
-            <div class="form-group">
-                <label for="signInPassword">Password</label>
-                <input type="password" id="signInPassword" required>
-                <p id="passwordError"></p>
-            </div>
-            <button type="submit">Sign In</button>
-            <a onclick= "switchSigninAndReg(true)">Don't have an account? Register</a>
-        </form>
+    </script>
 
-        
-        <form id="registerForm" style="display: none;">
-            <h1>Register</h1>
-            <div class="form-group">
-                <label for="registerEmail">Email</label>
-                <input type="email" id="registerEmail" required>
-                <p id="emailErrorRegister"></p>
+
+    <div class="main-container">
+        <div class="header">
+            <div class="content">
+                <div class="signup-form">
+                    <form id="signInForm">
+                        <h2 class="title">Sign In</h2>
+                        <div class="form-group">
+                            <label for="signInEmail">Email</label>
+                            <input type="email" id="signInEmail" class="input-field" required>
+                            <p id="emailError"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="signInPassword">Password</label>
+                            <input type="password" id="signInPassword" class="input-field" required>
+                            <p id="passwordError"></p>
+                        </div>
+                        <button type="submit" class="btn-register">Sign In</button>
+                        <p class="login-text">
+                            <a onclick="{
+                                signInForm.style.display = 'none';
+                                registerForm.style.display = 'block';
+                            }">Don't have an account? Register</a>
+                        </p>
+                    </form>
+                    <form id="registerForm">
+                        <h2 class="title">Register</h2>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" class="input-field" required>
+                            <p id="emailErrorRegister"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" class="input-field" required>
+                            <p id="passwordErrorRegister"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" class="input-field" required>
+                            <p id="confirmPasswordErrorRegister"></p>
+                        </div>
+                        <button type="submit" class="btn-register">Register</button>
+                        <p class="login-text">
+                            <a onclick="{
+                                signInForm.style.display = 'block';
+                                registerForm.style.display = 'none';
+                            }">Already have an account? Sign In</a>
+                        </p>
+                    </form>
+                </div>
+                <div class="image-section">
+                    <img src="./img/frame-29.png" alt="Image" class="image" />
+                </div>
             </div>
-            <div class="form-group">
-                <label for="registerPassword">Password</label>
-                <input type="password" id="registerPassword" required>
-                <p id="passwordErrorRegister"></p>
-            </div>
-            <div class="form-group">
-                <label for="registerConnfirmPassword">Confirm Password</label>
-                <input type="password" id="registerConfirmPassword" required>
-                <p id="confirmPasswordErrorRegister"></p>
-            </div>
-            <button type="submit">Register</button>
-            <a onclick="switchSigninAndReg(false)">Already have an account? Sign In</a>
-        </form>
+        </div>
     </div>
 
-    <script>
-        function switchSigninAndReg(flag){
-            if(flag){
-                signInForm.style.display = 'none';
-                registerForm.style.display = 'block';
-            }else{
-                signInForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            }
-        }
-    </script>
-   
 
-    
+
+
 </body>
+
 </html>

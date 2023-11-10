@@ -1,6 +1,14 @@
-
 function addCategoryRow() {
     var table = document.querySelector("table");
+
+    // Calculate the total weight in existing rows
+    var existingWeight = calculateTotalWeight();
+
+    if (existingWeight >= 1.0) {
+        alert("Error: Total weight in existing rows exceeds 1.0. Cannot add a new row.");
+        return;
+    }
+
     var newRow = table.insertRow(-1);
 
     var cell1 = newRow.insertCell(0);
@@ -15,7 +23,7 @@ function addCategoryRow() {
             <option value="number">Number</option>
             <option value="descriptive">Descriptive</option>
         </select>`;
-    cell3.innerHTML = `<input type="number" step="0.01" name="weight[]" placeholder="Remaining: 1.00" oninput="updateRemainingWeight(this)"><span class="error-message" style="font-size: 10px;"></span>`;    
+    cell3.innerHTML = `<input type="number" step="0.01" name="weight[]" placeholder="Remaining: ${(1.0 - existingWeight).toFixed(2)}" oninput="updateRemainingWeight(this)"><span class="error-message" style="font-size: 10px;"></span>`;
     cell4.innerHTML = `
         <select name="direction_to_optimize[]">
             <option value="up">Up</option>
@@ -26,6 +34,42 @@ function addCategoryRow() {
         <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
 }
 
+function updateRemainingWeight(input) {
+    var table = document.querySelector("table");
+    var weightInputs = table.querySelectorAll('input[name="weight[]"]');
+
+    var totalWeight = 0.0;
+
+    weightInputs.forEach(function (weightInput) {
+        var weightValue = parseFloat(weightInput.value) || 0;
+        totalWeight += weightValue;
+    });
+
+    var remainingWeight = 1.0 - totalWeight;
+
+    if (remainingWeight >= 0) {
+        // If there is still remaining weight, set it as a placeholder for the current input
+        input.placeholder = "Remaining: " + remainingWeight.toFixed(2);
+    } else {
+        // If the remaining weight is negative, throw an error
+        alert("Error: Total weight exceeds 1.0");
+        input.value = "";
+    }
+}
+
+function calculateTotalWeight() {
+    var table = document.querySelector("table");
+    var weightInputs = table.querySelectorAll('input[name="weight[]"]');
+
+    var totalWeight = 0.0;
+
+    weightInputs.forEach(function (weightInput) {
+        var weightValue = parseFloat(weightInput.value) || 0;
+        totalWeight += weightValue;
+    });
+
+    return totalWeight;
+}
 function addScenarioRow() {
     var table = document.querySelectorAll("table")[1];
     var newRow = table.insertRow(-1);

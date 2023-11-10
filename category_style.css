@@ -1,0 +1,217 @@
+body {
+    background-color: #3F5843;
+    font-family: Arial, sans-serif;
+}
+table {
+   margin: auto;
+margin-top: 10px;
+    display: table;
+    flex-direction: column;
+    width: 852px;
+align-items: center;
+border-radius: 10px;
+overflow: hidden;
+}
+th, td {
+background-color: #d9d9d9;  
+text-align: center;  
+padding-inline: 25px;	
+align-items: flex-start;
+gap: 4px;
+position: relative;
+flex: 1;
+flex-grow: 1;
+}
+tr:nth-child(odd) td {
+align-items: center;
+justify-content: center;
+gap: 16px;
+padding: 10px;
+position: relative;
+align-self: stretch;
+width: 100%;
+flex: 0 0 auto;
+background-color: #d9d9d9;        
+}
+tr:nth-child(even) td {
+align-items: center;
+justify-content: center;
+gap: 16px;
+padding: 10px;
+position: relative;
+align-self: stretch;
+width: 100%;
+flex: 0 0 auto;
+background-color: #b7c1b9;      
+}
+select {
+width: 100%;
+}
+.add-button {
+text-align: center;
+    margin-top: 20px;
+}
+.add-button button {
+    background-color: black;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+.add-button button:hover {
+background-color: #2D402E;
+}
+.rectangle-2 {
+margin: auto;
+margin-top: 25px;
+position: relative; 
+width: 349px;
+height: 50px;
+left: 1px;
+background-color: #d9d9d9;
+border-radius: 10px;
+}
+.text-wrapper-5 {
+width: 349px;
+padding: 5px;
+text-shadow: 0px 4px 4px #00000040;
+font-family: "Poppins", Helvetica;
+font-weight: 700;
+color: #3f5843;
+font-size: 32px;
+text-align: center;
+letter-spacing: 0;
+line-height: normal;
+white-space: nowrap;
+}
+h1, h2 {
+text-align: center;
+}
+.submit-button {
+text-align: center;
+margin-top: 10px;
+}
+.submit-button button {
+background-color: black;
+color: #fff;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+transition: background-color 0.3s;
+}
+.submit-button button:hover {
+background-color: #2D402E;
+}
+#temp-submit-button{
+margin-left: 20px;
+margin-bottom: 20px;
+}
+.delete-icon, .clear-icon {
+cursor: pointer;
+margin: 0 5px;
+}
+
+/* The Modal (background) */
+.modal {
+display: none; /* Hidden by default */
+position: fixed; /* Stay in place */
+z-index: 1; /* Sit on top */
+padding-top: 50px; 
+
+left: 0;
+top: 0;
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+overflow: auto;/* overflow: auto; Enable scroll if needed */
+background-color: rgb(0,0,0); /* Fallback color */
+background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+background-color: #3f5843;
+position: absolute;
+width: 1000px;
+height: 740px;
+top: 50px;
+left: 150px;
+border-radius: 20px;
+}
+
+/* The Close Button */
+.close {
+color: #aaaaaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+color: #000;
+text-decoration: none;
+cursor: pointer;
+}
+
+
+/* CSS */
+.button-4 {
+appearance: none;
+background-color: #FAFBFC;
+border: 1px solid rgba(27, 31, 35, 0.15);
+border-radius: 6px;
+box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+box-sizing: border-box;
+color: #24292E;
+cursor: pointer;
+display: inline-block;
+font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+font-size: 14px;
+font-weight: 500;
+line-height: 20px;
+list-style: none;
+padding: 6px 16px;
+position: relative;
+transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+vertical-align: middle;
+white-space: nowrap;
+word-wrap: break-word;
+}
+
+.button-4:hover {
+background-color: #F3F4F6;
+text-decoration: none;
+transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+background-color: #FAFBFC;
+border-color: rgba(27, 31, 35, 0.15);
+color: #959DA5;
+cursor: default;
+}
+
+.button-4:active {
+background-color: #EDEFF2;
+box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+transition: none 0s;
+}
+
+.button-4:focus {
+outline: 1px transparent;
+}
+
+.button-4:before {
+display: none;
+}
+
+.button-4:-webkit-details-marker {
+display: none;}
