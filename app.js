@@ -55,7 +55,7 @@ function clearRow(element) {
 }
 
 ///ADDD VALIDATION PLS
-function updateRemainingWeight(input) {
+/*function updateRemainingWeight(input) {
     validateWeight(input);
     var table = document.querySelector("table");
     var weightInputs = table.querySelectorAll('input[name="weight[]"]');
@@ -72,7 +72,31 @@ function updateRemainingWeight(input) {
     weightInputs.forEach(function(weightInput) {
         weightInput.placeholder = "Remaining: " + remainingWeight;
     });
+}*/
+
+function updateRemainingWeight(input) {
+    var table = document.querySelector("table");
+    var weightInputs = table.querySelectorAll('input[name="weight[]"]');
+
+    var totalWeight = 0.0;
+
+    weightInputs.forEach(function (weightInput) {
+        var weightValue = parseFloat(weightInput.value) || 0;
+        totalWeight += weightValue;
+    });
+
+    var remainingWeight = 1.0 - totalWeight;
+
+    if (remainingWeight >= 0) {
+        // If there is still remaining weight, set it as a placeholder for the current input
+        input.placeholder = "Remaining: " + remainingWeight.toFixed(2);
+    } else {
+        // If the remaining weight is negative, throw an error
+        alert("Error: Total weight exceeds 1.0");
+        input.value = "";
+    }
 }
+
 
 function validateWeight(input) {
     var value = parseFloat(input.value);
