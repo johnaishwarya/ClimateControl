@@ -195,23 +195,6 @@ function getValuesTableData(){
     return updatedValuesData;
 }
 
-// function updateInputType(selectElement) {
-//         var selectedValue = selectElement.value;
-//         var numericInput = document.querySelector('input[type="number"]');
-//         var descriptiveInput = document.querySelector('input[type="text"]');
-//         var descriptiveSelect = document.querySelector('select[name="descriptive[]"]');
-
-//         if (selectedValue === 'number') {
-//             numericInput.style.display = 'block';
-//             descriptiveInput.style.display = 'none';
-//             descriptiveSelect.style.display = 'none';
-//         } else if (selectedValue === 'descriptive') {
-//             numericInput.style.display = 'none';
-//             descriptiveInput.style.display = 'block';
-//             descriptiveSelect.style.display = 'block';
-//         }
-//     }
-
 
 
 function valueTable(){
