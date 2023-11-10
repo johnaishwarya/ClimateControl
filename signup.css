@@ -1,66 +1,27 @@
 body {
   /* margin: 0%;
   padding: 0%; */
-  background-color: #F0F0F0;
+  background-color: #3F5843;
 }
 
-.main-container {
-  /* justify-content: flex-end; */
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-}
-
-  .header {
-    align-self: center;
-    width: 100%;
-    max-width: 1350px;
-  }
-
-  @media (max-width: 991px) {
-    .header {
-      max-width: 100%;
-    }
-  }
-
-
-  .content {
-    display: flex;
-    gap: 20px;
-  }
-
-  @media (max-width: 991px) {
-    .content {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0px;
-    }
-  }
 
   .signup-form {
     border-radius: 10px;
     /* box-shadow: 0px 4px 64px 0px rgba(0, 0, 0, 0.05); */
-    background-color: #3F5843;
-    display: flex;
+    background-color: #F0F0F0;
+    /* display: flex; */
     flex-direction: column;
-    width: 60%;
-    margin-right: 3%;
-    margin-top: 5%;
+    width: 30%;
+    margin-right: 18%;
+    margin-top: 2%;
     margin-left: 2%;
     margin-bottom: 10%;
     padding: 10px 15px 50px;
   }
 
-  @media (max-width: 991px) {
-    .signup-form {
-      max-width: 100%;
-      margin-top: 10px;
-    }
-  }
 
   .title {
-    color: #F0F0F0;
+    color: #3F5843;
     font-weight: 700;
     font-size: 31px;
     padding: 20px;
@@ -70,6 +31,7 @@ body {
 
   .form-group {
     margin-top: 20px;
+    flex: 1;
     display: flex;
     flex-direction: column;
     margin-top: 5px;
@@ -79,7 +41,7 @@ body {
   }
 
   .form-group label {
-    color: #3f5843;
+    color: #3f3f3f;
     font-weight: 700;
     max-width: 493px;
     font-size: 16px;
@@ -88,7 +50,7 @@ body {
   }
 
   .input-field {
-    color: #F0F0F0;
+    color: white;
     align-self: auto;
     text-wrap: nowrap;
     border-radius: 6px;
@@ -105,13 +67,13 @@ body {
     margin-right: 5px;
   }
 
-  @media (max-width: 991px) {
+  /* @media (max-width: 991px) {
     .input-field {
       text-wrap: initial;
       max-width: 100%;
       padding-left: 0px;
     }
-  }
+  } */
 
   .btn-register {
     text-wrap: nowrap;
@@ -124,23 +86,20 @@ body {
     max-width: 100%;
     width: 50%; /* Adjust the width as needed */
     margin: 4% auto; /* Center the button horizontally */
-    background-color: #F0F0F0;
+    background-color: #3F5843;
     color: #3F5843;
 }
 
-
-
-
-  @media (max-width: 991px) {
+  /* @media (max-width: 991px) {
     .btn-register {
       text-wrap: initial;
       max-width: 100%;
       padding-left: 0px;
     }
-  }
+  } */
 
   .login-text {
-    color: #F0F0F0;
+    color: #3F5843;
     text-align: center;
     max-width: 310px;
     margin: 25px 0 1 -38px;
@@ -151,39 +110,27 @@ body {
   }
 
   .login-link {
-    color: #F0F0F0;
+    color: #3F5843;
     font-weight: 600;
     color: rgba(63, 88, 67, 1);
     text-decoration: none;
   }
-
-  .image-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    align-items: flex-end; 
-    width: 100%;
-    height: fit-contents;
+  .signup-form, .image-section {
+    flex: 1;
 }
 
-
-
-@media (max-width: 991px) {
   .image-section {
-    width: 100%;
-  }
+    /* height:0%; */
+    width: auto;
+    height: auto;
+    margin-left: -15%;
+    /* display: flex; */
+    /* align-items: center */
+    /* justify-content: center; */
 }
 
 .image {
-  /* aspect-ratio: 1; */
-  /* object-fit: cover; */
-  /* object-position: right;  */
-  width: 10000%;
-  /* height: %; */
-  align-self: start;
-  align-items: flex-start;
-  max-width: 100%;
-  position:static;
-/* right: 0%; */
-}
+    width: auto;
+    height: auto;
+  }
 

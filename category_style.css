@@ -1,95 +1,58 @@
 body {
-    background-color: #F0F0F0;
-    font-family: 'Poppins', sans-serif;
-}
-.button-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.action-button {
     background-color: #3F5843;
-    color: #fff;
-    border: none;
-    margin-top: 15px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 40%;
-    margin-right: 40%;
-    z-index: 1;
-    transition: background-color 0.3s;
+    font-family: Arial, sans-serif;
 }
-
-.action-button:hover {
-    background-color: #2D402E;
-}
-
-
-
-.sign-out-button-container {
-    padding: 0 10px; /* Adjust the padding values as needed */
-}
-
-#signOutButton {
-    background-color: #3F5843;
-    color: #fff;
-    border: none;
-    margin-top: 15px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 1;
-    transition: background-color 0.3s;
-}
-
-#signOutButton:hover {
-    background-color: #2D402E;
-}
-
-
 table {
-    border-collapse: collapse;
-    width: 60%;
-    margin: 0 auto;
-    color: #333;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   margin: auto;
+margin-top: 10px;
+    display: table;
+    flex-direction: column;
+    width: 852px;
+align-items: center;
+border-radius: 10px;
+overflow: hidden;
 }
-
 th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
+background-color: #d9d9d9;  
+text-align: center;  
+padding-inline: 25px;	
+align-items: flex-start;
+gap: 4px;
+position: relative;
+flex: 1;
+flex-grow: 1;
 }
-
-th {
-    background-color: #f2f2f2;
-}
-
 tr:nth-child(odd) td {
-    background-color: #fff; /* White for odd rows */
+align-items: center;
+justify-content: center;
+gap: 16px;
+padding: 10px;
+position: relative;
+align-self: stretch;
+width: 100%;
+flex: 0 0 auto;
+background-color: #d9d9d9;        
 }
-
 tr:nth-child(even) td {
-    background-color: #F7F6FE; /* #F7F6FE for even rows */
+align-items: center;
+justify-content: center;
+gap: 16px;
+padding: 10px;
+position: relative;
+align-self: stretch;
+width: 100%;
+flex: 0 0 auto;
+background-color: #b7c1b9;      
 }
-
 select {
-    width: 100%;
+width: 100%;
 }
-
 .add-button {
-    text-align: center;
+text-align: center;
     margin-top: 20px;
 }
-
 .add-button button {
-    background-color: #3F5843;
+    background-color: black;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -98,87 +61,157 @@ select {
     font-size: 16px;
     transition: background-color 0.3s;
 }
-
 .add-button button:hover {
-    background-color: #2D402E;
+background-color: #2D402E;
 }
-
+.rectangle-2 {
+margin: auto;
+margin-top: 25px;
+position: relative; 
+width: 349px;
+height: 50px;
+left: 1px;
+background-color: #d9d9d9;
+border-radius: 10px;
+}
+.text-wrapper-5 {
+width: 349px;
+padding: 5px;
+text-shadow: 0px 4px 4px #00000040;
+font-family: "Poppins", Helvetica;
+font-weight: 700;
+color: #3f5843;
+font-size: 32px;
+text-align: center;
+letter-spacing: 0;
+line-height: normal;
+white-space: nowrap;
+}
 h1, h2 {
-    text-align: center;
-    color: #000;
+text-align: center;
 }
-
 .submit-button {
-    text-align: center;
-    margin-top: 20px;
+text-align: center;
+margin-top: 10px;
 }
-
 .submit-button button {
-    background-color: #3F5843;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+background-color: black;
+color: #fff;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+transition: background-color 0.3s;
 }
-
 .submit-button button:hover {
-    background-color: #2D402E;
+background-color: #2D402E;
 }
-
+#temp-submit-button{
+margin-left: 20px;
+margin-bottom: 20px;
+}
 .delete-icon, .clear-icon {
-    cursor: pointer;
-    margin: 0 5px;
+cursor: pointer;
+margin: 0 5px;
 }
 
 /* The Modal (background) */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    padding-top: 50px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+display: none; /* Hidden by default */
+position: fixed; /* Stay in place */
+z-index: 1; /* Sit on top */
+padding-top: 50px; 
+
+left: 0;
+top: 0;
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+overflow: auto;/* overflow: auto; Enable scroll if needed */
+background-color: rgb(0,0,0); /* Fallback color */
+background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    height: 80%;
-    overflow: auto;
+background-color: #3f5843;
+position: absolute;
+width: 1000px;
+height: 740px;
+top: 50px;
+left: 150px;
+border-radius: 20px;
 }
 
 /* The Close Button */
 .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+color: #aaaaaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
 }
 
-.close:hover, .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+.close:hover,
+.close:focus {
+color: #000;
+text-decoration: none;
+cursor: pointer;
 }
 
-.image {
-    aspect-ratio: 1;
-    object-fit: none;
-    object-position: top; /* Align the image to the top */
-    width: 100%; /* Set the width to 100% to stretch across the top */
-    height: 10%; /* Adjusted height to maintain the aspect ratio and fit the container's height */
-    align-self: start;
-    align-items: flex-start;
-    max-width: 100%;
+
+/* CSS */
+.button-4 {
+appearance: none;
+background-color: #FAFBFC;
+border: 1px solid rgba(27, 31, 35, 0.15);
+border-radius: 6px;
+box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+box-sizing: border-box;
+color: #24292E;
+cursor: pointer;
+display: inline-block;
+font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+font-size: 14px;
+font-weight: 500;
+line-height: 20px;
+list-style: none;
+padding: 6px 16px;
+position: relative;
+transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+vertical-align: middle;
+white-space: nowrap;
+word-wrap: break-word;
 }
+
+.button-4:hover {
+background-color: #F3F4F6;
+text-decoration: none;
+transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+background-color: #FAFBFC;
+border-color: rgba(27, 31, 35, 0.15);
+color: #959DA5;
+cursor: default;
+}
+
+.button-4:active {
+background-color: #EDEFF2;
+box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+transition: none 0s;
+}
+
+.button-4:focus {
+outline: 1px transparent;
+}
+
+.button-4:before {
+display: none;
+}
+
+.button-4:-webkit-details-marker {
+display: none;}
