@@ -3,12 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toodaloo</title>
-    <link rel="stylesheet" href="global.css">
-    <link rel="stylesheet" href="signup.css">
-    <link rel="stylesheet" href="signin.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -23,9 +20,8 @@
 
 
         const signInForm = document.getElementById('signInForm');
-        const registerForm = document.getElementById('registerForm');
-        signInForm.style.display = 'block';
-        registerForm.style.display = 'none';
+        // const registerForm = document.getElementById('registerForm');
+        
 
         const signInemail = document.getElementById("signInEmail");
         const signInpassword = document.getElementById("signInPassword");
@@ -137,14 +133,14 @@
         const checkAuthState = async () => {
             onAuthStateChanged(auth, user => {
                 if (user) {
-                    login_container.style.display = 'none';
+                    // login_container.style.display = 'none';
                     window.location.href = "category.html";
                     // secretContent.style.display = 'block';
 
                 }
                 else {
                     //signInForm.style.display = 'block';
-                    login_container.style.display = 'block';
+                    // login_container.style.display = 'block';
                     // secretContent.style.display = 'none';
 
                 }
@@ -190,99 +186,160 @@
 
 
 
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('registerEmail');
-            const password = document.getElementById('registerPassword');
-            const confirmPassword = document.getElementById('registerConfirmPassword');
+        // registerForm.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     const email = document.getElementById('registerEmail');
+        //     const password = document.getElementById('registerPassword');
+        //     const confirmPassword = document.getElementById('registerConfirmPassword');
 
-            if (!validateEmail(email)) {
-                // alert('Please enter a valid email');
-                generateError("email", "Please enter a valid email", "register");
-                return;
-            }
-            if (!validatePassword(password)) {
-                // alert('Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character');
-                generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "register");
-                return;
-            }
-            if (password.value != confirmPassword.value) {
-                generateError("confirmPassword", "Password not identical", "register")
-                return
-            }
+        //     if (!validateEmail(email)) {
+        //         // alert('Please enter a valid email');
+        //         generateError("email", "Please enter a valid email", "register");
+        //         return;
+        //     }
+        //     if (!validatePassword(password)) {
+        //         // alert('Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character');
+        //         generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "register");
+        //         return;
+        //     }
+        //     if (password.value != confirmPassword.value) {
+        //         generateError("confirmPassword", "Password not identical", "register")
+        //         return
+        //     }
 
-            createUserWithEmailAndPassword(auth, email.value, confirmPassword.value)
-                .then((userCredential) => {
+        //     createUserWithEmailAndPassword(auth, email.value, confirmPassword.value)
+        //         .then((userCredential) => {
 
-                    const user = userCredential.user;
-                    alert('Registration successful!');
+        //             const user = userCredential.user;
+        //             alert('Registration successful!');
 
-                })
-                .catch((error) => {
+        //         })
+        //         .catch((error) => {
 
-                    const errorMessage = "Error - Email already exists";
-                    generateError("password", errorMessage, "register");
-                });
-        });
+        //             const errorMessage = "Error - Email already exists";
+        //             generateError("password", errorMessage, "register");
+        //         });
+        // });
     </script>
 
 
-    <div class="main-container">
-        <div class="header">
-            <div class="content">
-                <div class="signup-form">
+    <!-- partial:index.partial.html -->
+<!-- partial:index.partial.html -->
+<div id="container" class="container">
+    <!-- FORM SECTION -->
+    <div class="row">
+        <!-- SIGN UP -->
+        <div class="col align-items-center flex-col sign-up">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-up">
+                    <form id="signUpForm">
+                        <div class="input-group">
+                            <i class='bx bx-mail-send'></i>
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" class="input-field" required>
+                            <p id="emailErrorRegister"></p>
+                        </div>
+                        <div class="input-group">
+                            <i class='bx bxs-lock-alt'></i>
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" class="input-field" required>
+                            <p id="passwordErrorRegister"></p>
+                        </div>
+                        <div class="input-group">
+                            <i class='bx bxs-lock-alt'></i>
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" class="input-field" required>
+                            <p id="confirmPasswordErrorRegister"></p>
+                        </div>
+                        <button type="submit" class="btn-register">Sign Up</button>
+                        <p>
+                            <span>
+                                Already have an account?
+                            </span>
+                            <b onclick="toggle()" class="pointer">
+                                Sign in here
+                            </b>
+                        </p>
+                    </form>    
+                </div>
+            </div>
+        
+        </div>
+        <!-- END SIGN UP -->
+        <!-- SIGN IN -->
+        <div class="col align-items-center flex-col sign-in">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-in">
                     <form id="signInForm">
-                        <h2 class="title">Sign In</h2>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <i class='bx bxs-user'></i>
                             <label for="signInEmail">Email</label>
                             <input type="email" id="signInEmail" class="input-field" required>
                             <p id="emailError"></p>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <i class='bx bxs-lock-alt'></i>
                             <label for="signInPassword">Password</label>
                             <input type="password" id="signInPassword" class="input-field" required>
                             <p id="passwordError"></p>
                         </div>
                         <button type="submit" class="btn-register">Sign In</button>
-                        <p class="login-text">
-                            <a onclick="{
-                                signInForm.style.display = 'none';
-                                registerForm.style.display = 'block';
-                            }">Don't have an account? Register</a>
+                        <p>
+                            <b>
+                                Forgot password?
+                            </b>
                         </p>
-                    </form>
-                    <form id="registerForm">
-                        <h2 class="title">Register</h2>
-                        <div class="form-group">
-                            <label for="registerEmail">Email</label>
-                            <input type="email" id="registerEmail" class="input-field" required>
-                            <p id="emailErrorRegister"></p>
-                        </div>
-                        <div class="form-group">
-                            <label for="registerPassword">Password</label>
-                            <input type="password" id="registerPassword" class="input-field" required>
-                            <p id="passwordErrorRegister"></p>
-                        </div>
-                        <div class="form-group">
-                            <label for="registerConfirmPassword">Confirm Password</label>
-                            <input type="password" id="registerConfirmPassword" class="input-field" required>
-                            <p id="confirmPasswordErrorRegister"></p>
-                        </div>
-                        <button type="submit" class="btn-register">Register</button>
-                        <p class="login-text">
-                            <a onclick="{
-                                signInForm.style.display = 'block';
-                                registerForm.style.display = 'none';
-                            }">Already have an account? Sign In</a>
+                        <p>
+                            <span>
+                                Don't have an account?
+                            </span>
+                            <b onclick="toggle()" class="pointer">
+                                Sign up here
+                            </b>
                         </p>
-                    </form>
-                </div>
-                <div class="image-section">
-                    <img src="./img/frame-29.png" alt="Image" class="image" />
+                    </form>    
                 </div>
             </div>
+            <div class="form-wrapper">
+    
+            </div>
         </div>
+        <!-- END SIGN IN -->
     </div>
+    <!-- END FORM SECTION -->
+    <!-- CONTENT SECTION -->
+    <div class="row content-row">
+        <!-- SIGN IN CONTENT -->
+        <div class="col align-items-center flex-col">
+            <div class="text sign-in">
+                <h2>
+                    Welcome
+                </h2>
+
+            </div>
+            <div class="img sign-in">
+    
+            </div>
+        </div>
+        <!-- END SIGN IN CONTENT -->
+        <!-- SIGN UP CONTENT -->
+        <div class="col align-items-center flex-col">
+            <div class="img sign-up">
+            
+            </div>
+            <div class="text sign-up">
+                <h2>
+                    Join Us
+                </h2>
+
+            </div>
+        </div>
+        <!-- END SIGN UP CONTENT -->
+    </div>
+    <!-- END CONTENT SECTION -->
+</div>
+<!-- partial -->
+<script  src="./script.js"></script>
 
 
 

@@ -1,3 +1,4 @@
+
 function addCategoryRow() {
     var table = document.querySelector("table");
 
@@ -315,9 +316,9 @@ function valueTable(){
     }
     
     tableContainer.appendChild(table);
-    var submit_button = document.getElementById("temp-submit-button");
-    submit_button.style.display = "block";
-
+    // var submit_button = document.getElementById("temp-submit-button");
+    // submit_button.style.display = "block";
+    redirectToValuesTable();
 }
 
 function calculateScore() {
@@ -385,13 +386,9 @@ function calculateScore() {
 
     // After calculation, the valuesData object now contains the calculated linear scores.
     console.log(dimensionlessScores);
-    var firstModalPage = document.getElementById("firstModalPage");
-    var secondModalPage = document.getElementById("secondModalPage");
-    firstModalPage.style.display="none";
-    secondModalPage.style.display="block";
     var totalScores = totalScoreForEachScenario(dimensionlessScores);
     plot(totalScores);
-
+    redirectToGraphs();
 }
 
 
@@ -489,30 +486,30 @@ function totalScoreForEachScenario(dimensionlessScores){
 
 
 
-// // Get the modal
- var modal = document.getElementById("myModal");
+// // // Get the modal
+//  var modal = document.getElementById("myModal");
 
-function modalWindowOpen() {
-    var modal = document.getElementById("myModal");
-    modal.style.display = "block";
-    console.log("button pressed");
-}
+// function modalWindowOpen() {
+//     var modal = document.getElementById("myModal");
+//     modal.style.display = "block";
+//     console.log("button pressed");
+// }
 
-function closeWindowOpen() {
-    var modal = document.getElementById("myModal");
-    modal.style.display = "none";
-}
+// function closeWindowOpen() {
+//     var modal = document.getElementById("myModal");
+//     modal.style.display = "none";
+// }
 
 
 
-// When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", closeWindowWhenClickedAnywhere);
-function closeWindowWhenClickedAnywhere(event) {
-    var modal = document.getElementById("myModal");
-    if (event.target == modal) {
-        modal.style.display = "none";
-      }
-}
+// // When the user clicks anywhere outside of the modal, close it
+// window.addEventListener("click", closeWindowWhenClickedAnywhere);
+// function closeWindowWhenClickedAnywhere(event) {
+//     var modal = document.getElementById("myModal");
+//     if (event.target == modal) {
+//         modal.style.display = "none";
+//       }
+// }
 
 
 function plot(totalScores){
@@ -534,10 +531,56 @@ function plot(totalScores){
     Plotly.newPlot( chart, data);
 }
 
-function backToFirstModalPage(){
+// function backToFirstModalPage(){
+//     var firstModalPage = document.getElementById("firstModalPage");
+//     var secondModalPage = document.getElementById("secondModalPage");
+//     secondModalPage.style.display="none";
+//     firstModalPage.style.display="block";
+    
+// }
+
+function redirectToScenarioTable(){
     var firstModalPage = document.getElementById("firstModalPage");
     var secondModalPage = document.getElementById("secondModalPage");
+    secondModalPage.style.display="block";
+    firstModalPage.style.display="none";
+}
+
+
+function redirectToValuesTable(){
+    var secondModalPage = document.getElementById("secondModalPage");
+    var thirdModalWindow = document.getElementById("thirdModalWindow");
+    secondModalPage.style.display="none";
+    thirdModalWindow.style.display="block";
+}
+
+function redirectBackToCategoryTable(){
+    var secondModalPage = document.getElementById("secondModalPage");
+    var firstModalPage = document.getElementById("firstModalPage");
     secondModalPage.style.display="none";
     firstModalPage.style.display="block";
-    
+}
+
+
+function redirectBackToScenarioTable(){
+    var secondModalPage = document.getElementById("secondModalPage");
+    var thirdModalWindow = document.getElementById("thirdModalWindow");
+    thirdModalWindow.style.display="none";
+    secondModalPage.style.display="block";
+}
+
+function redirectToGraphs(){
+    var thirdModalWindow = document.getElementById("thirdModalWindow");
+    var fourthModalWindow = document.getElementById("fourthModalWindow");
+    thirdModalWindow.style.display="none";
+    fourthModalWindow.style.display="block";
+}
+
+
+function redirectBackToValuesTable(){
+    var thirdModalWindow = document.getElementById("thirdModalWindow");
+    var fourthModalWindow = document.getElementById("fourthModalWindow");
+    fourthModalWindow.style.display="none";
+    thirdModalWindow.style.display="block";
+
 }

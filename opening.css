@@ -341,9 +341,9 @@ h2 {
 
 /* CSS */
 .button-4 {
-  appearance: none;
-  background-color: #3f5843;
-  border-color: #3f5843;
+  /* appearance: none; */
+  /* background-color: #3f5843;
+  border-color: #3f5843; */
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   /* box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset; */
@@ -358,15 +358,15 @@ h2 {
   list-style: none;
   top: -693px;
   left: -105px;
-  padding: 6px 16px;
+  /* padding: 6px 16px;
   position: relative;
-  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  /* transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1); */
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: middle;
   white-space: nowrap;
-  word-wrap: break-word;
+  word-wrap: break-word; */
 }
 
 .button-4:hover {
