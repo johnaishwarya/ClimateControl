@@ -1,4 +1,67 @@
 
+let openOrNew = "New";
+let VTABLE = null;
+
+//ForModalWindow
+
+const body = document.querySelector("body");
+const modal = document.querySelector(".modal");
+const modalButton = document.querySelector(".modal-button");
+const newUploadButton = document.getElementById("upload");
+const closeButton = document.querySelector(".close-button");
+const scrollDown = document.querySelector(".scroll-down");
+let isOpened = false;
+
+var firstModalPage = document.getElementById("firstModalPage");
+var secondModalPage = document.getElementById("secondModalPage");
+var thirdModalWindow = document.getElementById("thirdModalWindow");
+var fourthModalWindow = document.getElementById("fourthModalWindow");
+
+const openModal = () => {
+    
+
+  modal.classList.add("is-open");
+  body.style.overflow = "hidden";
+  openOrNew = "New";
+  VTABLE = null;
+  var table = document.querySelector("#firstModalPage table.flat-table");
+
+    // Clear existing rows
+    while (table.rows.length > 2) {
+        table.deleteRow(1);
+    }
+    clearRow(table);
+
+
+};
+
+const openOpenModal = () => {
+    // firstModalPage.style.display = 'block';
+    // thirdModalWindow.style.display = 'none';
+    modal.classList.add("is-open");
+    body.style.overflow = "hidden";
+    openOrNew = "Open";
+  };
+
+const closeModal = () => {
+  modal.classList.remove("is-open");
+  body.style.overflow = "initial";
+};
+
+
+modalButton.addEventListener("click", openModal);
+closeButton.addEventListener("click", closeModal);
+newUploadButton.addEventListener("click", openOpenModal);
+
+document.onkeydown = evt => {
+  evt = evt || window.event;
+  evt.keyCode === 27 ? closeModal() : false;
+};
+
+
+//Functions
+
+
 function addCategoryRow() {
     var table = document.querySelector("table");
 
@@ -243,7 +306,14 @@ function getValuesTableData(){
 
 
 function valueTable(){
-
+    
+    console.log(openOrNew);
+    if(openOrNew == "Open" && VTABLE){
+        console.log(openOrNew);
+        redirectToValuesTable();
+        populateValuesTable(VTABLE);
+        return;
+    }
     var tableContainer = document.getElementById("table-container");
     tableContainer.innerHTML = "";
 
@@ -253,7 +323,7 @@ function valueTable(){
     var scenarioData = scenarioData.filter(entry => entry.scenarioName != "");
     //console.log(categoryWithoutEmpty);
     //console.log(allNamesEmpty);
-    console
+    
     if (categoryData.length == 0 && scenarioData.length==0) {
          alert('Enter the Category & Scenario Names');
          return;
@@ -318,7 +388,20 @@ function valueTable(){
     tableContainer.appendChild(table);
     // var submit_button = document.getElementById("temp-submit-button");
     // submit_button.style.display = "block";
-    redirectToValuesTable();
+    
+}
+
+
+function mapDescriptiveToInteger(value) {
+    var descriptiveValueMap = {
+        'low': 2,
+        'low-mid': 4,
+        'mid': 6,
+        'mid-high': 8,
+        'high': 10
+    };
+
+    return descriptiveValueMap[value] || 0; // Default to 0 if the value is not found in the map
 }
 
 function calculateScore() {
@@ -339,18 +422,11 @@ function calculateScore() {
         console.log("categoryWeight: ", categoryWeight);
         console.log("directionToOptimize: ", directionToOptimize);
 
-        
-        
-
         // Find min and max values for the category
         var min = Number.MAX_VALUE;
         var max = Number.MIN_VALUE;
         var i=0;
         for (var scenario of valuesData) {
-            
-            var s = scenario[scenarioData[0].scenarioName];
-
-            // console.log("Values: ", s[categoryName]);
             var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
             if (!isNaN(value)) {
                 if (value < min) {
@@ -368,17 +444,25 @@ function calculateScore() {
         // Calculate linear scores for each scenario in this category
         for (var scenario of scenarioData) {
             var scenarioName = scenario.scenarioName;
-            var value = parseFloat(valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName]);
+            var value = valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName];
+            if (category.scoringType === 'descriptive') {
+                // Map descriptive value to integer value
+                value = parseFloat(mapDescriptiveToInteger(value));
+            } else{
+                value = parseFloat(value);
+            }
+            console.log("s: ", scenarioName, "value: ", value);
+            
 
             if (!isNaN(value)) {
                 if (directionToOptimize === 'down') {
                     // Minimize the linear score
                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
-                    dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
+                    dimensionlessScores[scenarioName][categoryName] = -1*(categoryWeight*((min - value) / (max - min)));
                 } else if (directionToOptimize === 'up') {
                     // Maximize the linear score
                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
-                    dimensionlessScores[scenarioName][categoryName] = categoryWeight*((value - min) / (max - min));
+                    dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
                 }
             }
         }
@@ -392,76 +476,78 @@ function calculateScore() {
 }
 
 
-function openMe(){
-    // var categoryData = [{categoryName: 'Emission', scoringType: 'number', weight: '0.3', directionToOptimize: 'up'}, {categoryName: 'Air', scoringType: 'number', weight: '0.4', directionToOptimize: 'up'}, {categoryName: 'Water', scoringType: 'number', weight: '0.3', directionToOptimize: 'down'}];
-    // var scenarioData = [{scenarioName: 'Bike'}, {scenarioName: 'Car'}, {scenarioName: 'Cycle'}];
-    // var valuesData = [{Bike: {Emission: '1000', Air: '43', Water: '65'}}, {Car:{Emission: '200', Air: '23', Water: '10'}}, {Cycle:{Emission: '-100', Air: '65', Water: '6'}}];
-    // var dimensionlessScores = {};
 
-    // console.log(categoryData)
-    // console.log(scenarioData)
-    // console.log(valuesData)
 
-    // for (var category of categoryData) {
-    //     var categoryName = category.categoryName;
-    //     var categoryWeight = category.weight;
-    //     var directionToOptimize = category.directionToOptimize;
-    //     console.log("categoryName: ", categoryName);
-    //     console.log("categoryWeight: ", categoryWeight);
-    //     console.log("directionToOptimize: ", directionToOptimize);
+// function openMe(){
+//     var categoryData = [{categoryName: 'Emission', scoringType: 'number', weight: '0.3', directionToOptimize: 'up'}, {categoryName: 'Air', scoringType: 'number', weight: '0.4', directionToOptimize: 'up'}, {categoryName: 'Water', scoringType: 'number', weight: '0.3', directionToOptimize: 'down'}];
+//     var scenarioData = [{scenarioName: 'Bike'}, {scenarioName: 'Car'}, {scenarioName: 'Cycle'}];
+//     var valuesData = [{Bike: {Emission: '1000', Air: '43', Water: '65'}}, {Car:{Emission: '200', Air: '23', Water: '10'}}, {Cycle:{Emission: '-100', Air: '65', Water: '6'}}];
+//     var dimensionlessScores = {};
+
+//     console.log(categoryData)
+//     console.log(scenarioData)
+//     console.log(valuesData)
+
+//     for (var category of categoryData) {
+//         var categoryName = category.categoryName;
+//         var categoryWeight = category.weight;
+//         var directionToOptimize = category.directionToOptimize;
+//         console.log("categoryName: ", categoryName);
+//         console.log("categoryWeight: ", categoryWeight);
+//         console.log("directionToOptimize: ", directionToOptimize);
 
         
         
 
-    //     // Find min and max values for the category
-    //     var min = Number.MAX_VALUE;
-    //     var max = Number.MIN_VALUE;
-    //     var i=0;
-    //     for (var scenario of valuesData) {
+//         // Find min and max values for the category
+//         var min = Number.MAX_VALUE;
+//         var max = Number.MIN_VALUE;
+//         var i=0;
+//         for (var scenario of valuesData) {
             
-    //         var s = scenario[scenarioData[0].scenarioName];
+//             var s = scenario[scenarioData[0].scenarioName];
 
-    //         // console.log("Values: ", s[categoryName]);
-    //         var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
-    //         if (!isNaN(value)) {
-    //             if (value < min) {
-    //                 min = value;
-    //             }
-    //             if (value > max) {
-    //                 max = value;
-    //             }
-    //         }
-    //         i++;
-    //     }
+//             // console.log("Values: ", s[categoryName]);
+//             var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
+//             if (!isNaN(value)) {
+//                 if (value < min) {
+//                     min = value;
+//                 }
+//                 if (value > max) {
+//                     max = value;
+//                 }
+//             }
+//             i++;
+//         }
         
-    //     console.log("min: ", min, " max :", max);
+//         console.log("min: ", min, " max :", max);
 
-    //     // Calculate linear scores for each scenario in this category
-    //     for (var scenario of scenarioData) {
-    //         var scenarioName = scenario.scenarioName;
-    //         var value = parseFloat(valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName]);
+//         // Calculate linear scores for each scenario in this category
+//         for (var scenario of scenarioData) {
+//             var scenarioName = scenario.scenarioName;
+//             var value = parseFloat(valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName]);
 
-    //         if (!isNaN(value)) {
-    //             if (directionToOptimize === 'down') {
-    //                 // Minimize the linear score
-    //                 dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
-    //                 dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
-    //             } else if (directionToOptimize === 'up') {
-    //                 // Maximize the linear score
-    //                 dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
-    //                 dimensionlessScores[scenarioName][categoryName] = categoryWeight*((value - min) / (max - min));
-    //             }
-    //         }
-    //     }
-    // }
+//             if (!isNaN(value)) {
+//                 if (directionToOptimize === 'down') {
+//                     // Minimize the linear score
+//                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
+//                     dimensionlessScores[scenarioName][categoryName] = -1*(categoryWeight*((min - value) / (max - min)));
+//                 } else if (directionToOptimize === 'up') {
+//                     // Maximize the linear score
+//                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
+//                     dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
+//                 }
+//             }
+//         }
+//     }
 
-    // // After calculation, the valuesData object now contains the calculated linear scores.
-    // console.log(dimensionlessScores);
-    // var totalScores = totalScoreForEachScenario(dimensionlessScores);
-    // plot(totalScores);
-
+//     // After calculation, the valuesData object now contains the calculated linear scores.
+//     console.log(dimensionlessScores);
+//     var totalScores = totalScoreForEachScenario(dimensionlessScores);
+//     plot(totalScores);
     
-}
+    
+// }
 
 function totalScoreForEachScenario(dimensionlessScores){
     var totalscore = [];
@@ -482,35 +568,444 @@ function totalScoreForEachScenario(dimensionlessScores){
     return totalscore;
 }
 
+// // Function to populate the Category table
+// function populateCategoryTable(data) {
+//     var table = document.querySelector("#firstModalPage table.flat-table");
 
+//     // Clear existing rows
+//     while (table.rows.length > 1) {
+//         table.deleteRow(1);
+//     }
 
+//     // Populate with new data
+//     for (var i = 0; i < data.length; i++) {
+//         var row = table.insertRow(-1);
 
+//         var cell1 = row.insertCell(0);
+//         var cell2 = row.insertCell(1);
+//         var cell3 = row.insertCell(2);
+//         var cell4 = row.insertCell(3);
+//         var cell5 = row.insertCell(4);
 
-// // // Get the modal
-//  var modal = document.getElementById("myModal");
-
-// function modalWindowOpen() {
-//     var modal = document.getElementById("myModal");
-//     modal.style.display = "block";
-//     console.log("button pressed");
+//         cell1.innerHTML = '<input type="text" name="category_name[]" value="' + data[i].categoryName + '">';
+//         cell2.innerHTML = `
+//             <select name="scoring_type[]">
+//                 <option value="number" ${data[i].scoringType === 'number' ? 'selected' : ''}>Number</option>
+//                 <option value="descriptive" ${data[i].scoringType === 'descriptive' ? 'selected' : ''}>Descriptive</option>
+//             </select>`;
+//         cell3.innerHTML = `<input type="number" step="0.01" name="weight[]" value="${data[i].weight}" oninput="updateRemainingWeight(this)">
+//             <span class="error-message" style="font-size: 10px;"></span>`;
+//         cell4.innerHTML = `
+//             <select name="direction_to_optimize[]">
+//                 <option value="up" ${data[i].directionToOptimize === 'up' ? 'selected' : ''}>Up</option>
+//                 <option value="down" ${data[i].directionToOptimize === 'down' ? 'selected' : ''}>Down</option>
+//             </select>`;
+//         cell5.innerHTML = `
+//             <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+//             <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
+//     }
 // }
 
-// function closeWindowOpen() {
-//     var modal = document.getElementById("myModal");
-//     modal.style.display = "none";
+// // Function to populate the Scenario table
+// function populateScenarioTable(data) {
+//     var table = document.querySelector("#secondModalPage table");
+
+//     // Clear existing rows
+//     while (table.rows.length > 1) {
+//         table.deleteRow(1);
+//     }
+
+//     // Populate with new data
+//     for (var i = 0; i < data.length; i++) {
+//         var row = table.insertRow(-1);
+
+//         var cell1 = row.insertCell(0);
+//         var cell2 = row.insertCell(1);
+
+//         cell1.innerHTML = '<input type="text" name="scenario_name[]" value="' + data[i].scenarioName + '">';
+//         cell2.innerHTML = `
+//             <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+//             <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
+//     }
+// }
+
+// // Function to populate the Values table
+// function populateValuesTable(data) {
+//     var tableContainer = document.getElementById("table-container");
+//     tableContainer.innerHTML = "";
+
+//     var table = document.createElement("table");
+//     var headerRow = table.insertRow(0);
+//     var firstColNRow = headerRow.insertCell(0);
+//     firstColNRow.textContent = "";
+
+//     // Populate header cells
+//     for (var i = 0; i < data[0].length; i++) {
+//         var headerCell = headerRow.insertCell(headerRow.cells.length);
+//         headerCell.textContent = data[0][i];
+//     }
+
+//     // Populate rows with scenario names and input fields
+//     for (var i = 1; i < data.length; i++) {
+//         var rowData = data[i];
+//         var scenarioRow = table.insertRow(i);
+
+//         for (var j = 0; j < rowData.length; j++) {
+//             var dataCell = scenarioRow.insertCell(scenarioRow.cells.length);
+//             dataCell.innerHTML = '<input type="text" value="' + rowData[j] + '">';
+//         }
+//     }
+
+//     tableContainer.appendChild(table);
 // }
 
 
+// var categoryData = getCategoryData();
+    // var scenarioData = getScenarioData();
+    // var valuesData = getValuesTableData();
 
-// // When the user clicks anywhere outside of the modal, close it
-// window.addEventListener("click", closeWindowWhenClickedAnywhere);
-// function closeWindowWhenClickedAnywhere(event) {
-//     var modal = document.getElementById("myModal");
-//     if (event.target == modal) {
-//         modal.style.display = "none";
-//       }
+function saveDataToTSV(categoryData, scenarioData, valuesData) {
+
+    var categoryData = getCategoryData();
+    var scenarioData = getScenarioData();
+    var valuesData = getValuesTableData();
+    console.log("C: ", categoryData);
+    console.log("S: ", scenarioData);
+    console.log("V: ", valuesData);
+    // Combine all data into a single array
+    var allData = [categoryData, scenarioData, valuesData];
+
+    // Convert the data to TSV format
+    var tsvContent = allData.map(dataArray => dataArray.map(entry => Object.values(entry).map(value => JSON.stringify(value)).join('\t')).join('\n')).join('\n\n');
+    // tsvContent.join(valuesData.map(dataArray => dataArray.map(entry => Object.values(entry).map(value => JSON.stringify(value)).join('\t')).join('\n')).join('\n\n'));
+        
+
+
+    // var tsvContent = allData.map(dataArray => {
+    //     return dataArray.map(entry => {
+    //         if (Array.isArray(entry)) {
+    //             // For array data (e.g., categoryData and scenarioData)
+    //             console.log("e: ",entry);
+    //             return entry.join('\t');
+    //         } else {
+    //             // For object data (e.g., valuesData)
+    //             return Object.values(entry).map(value => JSON.stringify(value)).join('\t');
+    //         }
+    //     }).join('\n');
+    // }).join('\n\n');
+
+    // var tsvContent = allData.map(dataArray => dataArray.map(entry => Object.values(entry).join('\t')).join('\n')).join('\n\n');
+
+    console.log("tsv: ",tsvContent);
+
+    // Create a Blob containing the TSV content
+    var blob = new Blob([tsvContent], { type: 'text/tsv' });
+
+    // Create a link element to trigger the download
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'data.tsv';
+
+    // Append the link to the body and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+}
+
+// function loadTSVFile(inputFile, callback) {
+//     var fileReader = new FileReader();
+
+//     fileReader.onload = function (event) {
+//         var content = event.target.result;
+//         var tablesData = content.split('\n\n'); // Assuming each table is separated by two newlines
+
+//         var categoryData = tablesData[0].split('\n').map(row => {
+//             var [categoryName, scoringType, weight, directionToOptimize] = row.split('\t');
+//             return { categoryName, scoringType, weight, directionToOptimize };
+//         });
+
+//         var scenarioData = tablesData[1].split('\n').map(row => {
+//             var [scenarioName] = row.split('\t');
+//             return { scenarioName };
+//         });
+
+//         var valuesData = tablesData[2].split('\n').map(row => {
+//             var columns = row.split('\t');
+//             var scenarioName = columns[0];
+//             var data = {};
+
+//             for (var i = 1; i < columns.length; i++) {
+//                 var categoryName = categoryData[i - 1].categoryName;
+//                 data[categoryName] = columns[i];
+//             }
+
+//             return { [scenarioName]: data };
+//         });
+
+//         callback(categoryData, scenarioData, valuesData);
+
+//         populateCategoryTable(categoryData);
+//         populateScenarioTable(scenarioData);
+//         populateValuesTable(valuesData);
+
+//     };
+
+//     fileReader.readAsText(inputFile);
 // }
 
+
+// Function to populate the Category table
+function populateCategoryTable(data) {
+    var table = document.querySelector("#firstModalPage table.flat-table");
+
+    // Clear existing rows
+    while (table.rows.length > 1) {
+        table.deleteRow(1);
+    }
+
+    // Populate with new data
+    for (var i = 0; i < data.length; i++) {
+        var row = table.insertRow(-1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        
+        cell1.innerHTML = '<input type="text" name="category_name[]" value="' + data[i][0] + '">';
+        cell2.innerHTML = `
+            <select name="scoring_type[]">
+                <option value="number" ${data[i][1] === 'number' ? 'selected' : ''}>Number</option>
+                <option value="descriptive" ${data[i][1] === 'descriptive' ? 'selected' : ''}>Descriptive</option>
+            </select>`;
+        cell3.innerHTML = `<input type="number" step="0.01" name="weight[]" value="${parseFloat(data[i][2])}" oninput="updateRemainingWeight(this)">
+            <span class="error-message" style="font-size: 10px;"></span>`;
+        cell4.innerHTML = `
+            <select name="direction_to_optimize[]">
+                <option value="up" ${data[i][3] === 'up' ? 'selected' : ''}>Up</option>
+                <option value="down" ${data[i][3] === 'down' ? 'selected' : ''}>Down</option>
+            </select>`;
+        cell5.innerHTML = `
+            <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+            <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
+    }
+}
+
+// Function to populate the Scenario table
+function populateScenarioTable(data) {
+    var table = document.querySelector("#secondModalPage table");
+
+    // Clear existing rows
+    while (table.rows.length > 1) {
+        table.deleteRow(1);
+    }
+    
+
+    // Populate with new data
+    for (var i = 0; i < data.length; i++) {
+        var row = table.insertRow(-1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        
+        cell1.innerHTML = '<input type="text" name="scenario_name[]" value="' + data[i][0] + '">';
+        cell2.innerHTML = `
+            <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+            <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
+    }
+}
+
+// Function to populate the Values table
+function populateValuesTable(data) {
+    
+    // var firstArrayValues = Object.values(data[0][0]);
+    
+    var dataArr = [];
+    for(var i=0;i<data.length; i++){
+        // console.log();
+        dataArr[i] = Object.values(data[i][0]);
+    }
+    console.log(dataArr);
+    // thirdModalWindow.style.display = "none";
+    var tableContainer = document.getElementById("table-container");
+    tableContainer.innerHTML = "";
+    // tableContainer.style.display = "none";
+
+    var categoryData = getCategoryData(); 
+    var scenarioData = getScenarioData(); 
+    var categoryData = categoryData.filter(entry => entry.categoryName != "");
+    var scenarioData = scenarioData.filter(entry => entry.scenarioName != "");
+
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    var firstColNRow = headerRow.insertCell(0);
+    firstColNRow.textContent="";
+
+    // Create header cells with category names
+    for (var i = 0; i < categoryData.length; i++) {
+        if (categoryData[i].categoryName !== '') {
+            var categoryCell = headerRow.insertCell(headerRow.cells.length);
+            categoryCell.textContent = categoryData[i].categoryName;
+        } else{
+            console.log("Empty");
+        }
+    }
+
+    // Create rows with scenario names and input fields
+    for (var i = 0; i < scenarioData.length; i++) {
+        var scenarioRow = table.insertRow(i + 1);
+        var scenarioNameCell = scenarioRow.insertCell(0);
+        scenarioNameCell.textContent = scenarioData[i].scenarioName;
+
+        // Create cells for scenario values in corresponding categories with the appropriate input fields
+        for (var j = 0; j < categoryData.length; j++) {
+            var categoryCell = scenarioRow.insertCell(scenarioRow.cells.length);
+            if(categoryData[j].scoringType === 'descriptive'){
+                var select = document.createElement("select");
+                select.name = 'scenario_value';
+                var descriptiveOptions = ['low', 'low-mid', 'mid', 'mid-high', 'high'];
+                for (var option of descriptiveOptions) {
+                    var optionElement = document.createElement('option');
+                    optionElement.value = dataArr[i][j];
+                    optionElement.textContent = option;
+                    select.appendChild(optionElement);
+                }
+                categoryCell.appendChild(select);
+            }
+            else{
+                var input = document.createElement("input");
+                input.type = "number";
+                input.name = 'scenario_value';
+                input.value = dataArr[i][j];
+                categoryCell.appendChild(input);
+            }
+            
+        }
+    }
+    
+    tableContainer.appendChild(table);
+    // var submit_button = document.getElementById("temp-submit-button");
+    // submit_button.style.display = "block";
+    redirectToValuesTable();
+
+
+    
+
+
+
+
+
+
+    
+    // var tableContainer = document.getElementById("table-container");
+    // tableContainer.innerHTML = "";
+
+    // var table = document.createElement("table");
+    // var headerRow = table.insertRow(0);
+    // var firstColNRow = headerRow.insertCell(0);
+    // firstColNRow.textContent = "";
+
+    // var categoryData = getCategoryData();
+    // var scenarioData = getScenarioData();
+
+    // // Populate header cells
+    // for (var i = 0; i < data[0].length; i++) {
+    //     var headerCell = headerRow.insertCell(headerRow.cells.length);
+    //     headerCell.textContent = data[0][i];
+    // }
+
+    // // Populate rows with scenario names and input fields
+    // for (var i = 1; i < data.length; i++) {
+    //     var rowData = data[i];
+    //     var scenarioRow = table.insertRow(i);
+
+    //     for (var j = 0; j < rowData.length; j++) {
+    //         var dataCell = scenarioRow.insertCell(scenarioRow.cells.length);
+    //         dataCell.innerHTML = '<input type="text" value="' + rowData[j] + '">';
+    //     }
+    // }
+
+    // tableContainer.appendChild(table);
+}
+
+// Modify the loadTSVFile function
+function loadTSVFile(file) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        var content = e.target.result;
+        var dataArray = content.split('\n\n');
+
+        // Assuming the structure of dataArray is [categoryData, scenarioData, valuesData]
+        var categoryData = parseTSV(dataArray[0]);
+        var scenarioData = parseTSV(dataArray[1]);
+        var valuesData = parseTSV(dataArray[2]);
+
+        console.log("C: ", categoryData);
+        console.log("S: ", scenarioData);
+        console.log("V: ", valuesData);
+
+        // Populate the tables
+        populateCategoryTable(categoryData);
+        populateScenarioTable(scenarioData);
+        // populateValuesTable(valuesData);
+        VTABLE = valuesData;
+    };
+
+    reader.readAsText(file);
+}
+
+// Helper function to parse TSV
+function parseTSV(data) {
+    var rows = data.split('\n');
+    var result = [];
+
+    for (var i = 0; i < rows.length; i++) {
+        var columns = rows[i].split('\t');
+
+        // Check if the column contains a JSON string
+        var parsedColumns = columns.map(function (col) {
+            try {
+                return JSON.parse(col);
+            } catch (error) {
+                // If JSON parsing fails, use the original value
+                return col;
+            }
+        });
+
+        result.push(parsedColumns);
+    }
+
+    return result;
+}
+
+
+
+
+
+
+// Example Usage:
+// Assuming you have an input element for file upload like <input type="file" id="fileInput">
+document.getElementById('fileInput').addEventListener('change', function (event) {
+    var inputFile = event.target.files[0];
+
+    loadTSVFile(inputFile, function (categoryData, scenarioData, valuesData) {
+        // Use the loaded data as needed, e.g., populate tables
+        console.log('Loaded Category Data:', categoryData);
+        console.log('Loaded Scenario Data:', scenarioData);
+        console.log('Loaded Values Data:', valuesData);
+    });
+});
+
+function uploadFile() {
+    // Trigger the click event of the hidden file input
+    document.getElementById('fileInput').click();
+}
 
 function plot(totalScores){
     const keys = Object.keys(totalScores);
