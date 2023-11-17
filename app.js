@@ -386,6 +386,7 @@ function valueTable(){
     }
     
     tableContainer.appendChild(table);
+    redirectToValuesTable();
     // var submit_button = document.getElementById("temp-submit-button");
     // submit_button.style.display = "block";
     
