@@ -39,13 +39,17 @@ const openOpenModal = () => {
     // firstModalPage.style.display = 'block';
     // thirdModalWindow.style.display = 'none';
     modal.classList.add("is-open");
-    body.style.overflow = "hidden";
+    body.style.overflow = "auto";
     openOrNew = "Open";
   };
 
 const closeModal = () => {
   modal.classList.remove("is-open");
   body.style.overflow = "initial";
+  firstModalPage.style.display = "block";
+  secondModalPage.style.display = "none";
+  thirdModalWindow.style.display = "none";
+  fourthModalWindow.style.display = "none";
 };
 
 
@@ -161,26 +165,6 @@ function clearRow(element) {
         input.value = '';
     }
 }
-
-///ADDD VALIDATION PLS
-/*function updateRemainingWeight(input) {
-    validateWeight(input);
-    var table = document.querySelector("table");
-    var weightInputs = table.querySelectorAll('input[name="weight[]"]');
-    
-    var totalWeight = 1.0;
-    
-    weightInputs.forEach(function(weightInput) {
-        var weightValue = parseFloat(weightInput.value) || 0;
-        totalWeight -= weightValue;
-    });
-    
-    var remainingWeight = totalWeight.toFixed(2);
-    
-    weightInputs.forEach(function(weightInput) {
-        weightInput.placeholder = "Remaining: " + remainingWeight;
-    });
-}*/
 
 function updateRemainingWeight(input) {
     var table = document.querySelector("table");
@@ -477,79 +461,6 @@ function calculateScore() {
 }
 
 
-
-
-// function openMe(){
-//     var categoryData = [{categoryName: 'Emission', scoringType: 'number', weight: '0.3', directionToOptimize: 'up'}, {categoryName: 'Air', scoringType: 'number', weight: '0.4', directionToOptimize: 'up'}, {categoryName: 'Water', scoringType: 'number', weight: '0.3', directionToOptimize: 'down'}];
-//     var scenarioData = [{scenarioName: 'Bike'}, {scenarioName: 'Car'}, {scenarioName: 'Cycle'}];
-//     var valuesData = [{Bike: {Emission: '1000', Air: '43', Water: '65'}}, {Car:{Emission: '200', Air: '23', Water: '10'}}, {Cycle:{Emission: '-100', Air: '65', Water: '6'}}];
-//     var dimensionlessScores = {};
-
-//     console.log(categoryData)
-//     console.log(scenarioData)
-//     console.log(valuesData)
-
-//     for (var category of categoryData) {
-//         var categoryName = category.categoryName;
-//         var categoryWeight = category.weight;
-//         var directionToOptimize = category.directionToOptimize;
-//         console.log("categoryName: ", categoryName);
-//         console.log("categoryWeight: ", categoryWeight);
-//         console.log("directionToOptimize: ", directionToOptimize);
-
-        
-        
-
-//         // Find min and max values for the category
-//         var min = Number.MAX_VALUE;
-//         var max = Number.MIN_VALUE;
-//         var i=0;
-//         for (var scenario of valuesData) {
-            
-//             var s = scenario[scenarioData[0].scenarioName];
-
-//             // console.log("Values: ", s[categoryName]);
-//             var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
-//             if (!isNaN(value)) {
-//                 if (value < min) {
-//                     min = value;
-//                 }
-//                 if (value > max) {
-//                     max = value;
-//                 }
-//             }
-//             i++;
-//         }
-        
-//         console.log("min: ", min, " max :", max);
-
-//         // Calculate linear scores for each scenario in this category
-//         for (var scenario of scenarioData) {
-//             var scenarioName = scenario.scenarioName;
-//             var value = parseFloat(valuesData.find(data => data.hasOwnProperty(scenarioName))[scenarioName][categoryName]);
-
-//             if (!isNaN(value)) {
-//                 if (directionToOptimize === 'down') {
-//                     // Minimize the linear score
-//                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
-//                     dimensionlessScores[scenarioName][categoryName] = -1*(categoryWeight*((min - value) / (max - min)));
-//                 } else if (directionToOptimize === 'up') {
-//                     // Maximize the linear score
-//                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
-//                     dimensionlessScores[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min));
-//                 }
-//             }
-//         }
-//     }
-
-//     // After calculation, the valuesData object now contains the calculated linear scores.
-//     console.log(dimensionlessScores);
-//     var totalScores = totalScoreForEachScenario(dimensionlessScores);
-//     plot(totalScores);
-    
-    
-// }
-
 function totalScoreForEachScenario(dimensionlessScores){
     var totalscore = [];
     for (var scenario in dimensionlessScores) {
@@ -569,101 +480,6 @@ function totalScoreForEachScenario(dimensionlessScores){
     return totalscore;
 }
 
-// // Function to populate the Category table
-// function populateCategoryTable(data) {
-//     var table = document.querySelector("#firstModalPage table.flat-table");
-
-//     // Clear existing rows
-//     while (table.rows.length > 1) {
-//         table.deleteRow(1);
-//     }
-
-//     // Populate with new data
-//     for (var i = 0; i < data.length; i++) {
-//         var row = table.insertRow(-1);
-
-//         var cell1 = row.insertCell(0);
-//         var cell2 = row.insertCell(1);
-//         var cell3 = row.insertCell(2);
-//         var cell4 = row.insertCell(3);
-//         var cell5 = row.insertCell(4);
-
-//         cell1.innerHTML = '<input type="text" name="category_name[]" value="' + data[i].categoryName + '">';
-//         cell2.innerHTML = `
-//             <select name="scoring_type[]">
-//                 <option value="number" ${data[i].scoringType === 'number' ? 'selected' : ''}>Number</option>
-//                 <option value="descriptive" ${data[i].scoringType === 'descriptive' ? 'selected' : ''}>Descriptive</option>
-//             </select>`;
-//         cell3.innerHTML = `<input type="number" step="0.01" name="weight[]" value="${data[i].weight}" oninput="updateRemainingWeight(this)">
-//             <span class="error-message" style="font-size: 10px;"></span>`;
-//         cell4.innerHTML = `
-//             <select name="direction_to_optimize[]">
-//                 <option value="up" ${data[i].directionToOptimize === 'up' ? 'selected' : ''}>Up</option>
-//                 <option value="down" ${data[i].directionToOptimize === 'down' ? 'selected' : ''}>Down</option>
-//             </select>`;
-//         cell5.innerHTML = `
-//             <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-//             <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
-//     }
-// }
-
-// // Function to populate the Scenario table
-// function populateScenarioTable(data) {
-//     var table = document.querySelector("#secondModalPage table");
-
-//     // Clear existing rows
-//     while (table.rows.length > 1) {
-//         table.deleteRow(1);
-//     }
-
-//     // Populate with new data
-//     for (var i = 0; i < data.length; i++) {
-//         var row = table.insertRow(-1);
-
-//         var cell1 = row.insertCell(0);
-//         var cell2 = row.insertCell(1);
-
-//         cell1.innerHTML = '<input type="text" name="scenario_name[]" value="' + data[i].scenarioName + '">';
-//         cell2.innerHTML = `
-//             <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-//             <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
-//     }
-// }
-
-// // Function to populate the Values table
-// function populateValuesTable(data) {
-//     var tableContainer = document.getElementById("table-container");
-//     tableContainer.innerHTML = "";
-
-//     var table = document.createElement("table");
-//     var headerRow = table.insertRow(0);
-//     var firstColNRow = headerRow.insertCell(0);
-//     firstColNRow.textContent = "";
-
-//     // Populate header cells
-//     for (var i = 0; i < data[0].length; i++) {
-//         var headerCell = headerRow.insertCell(headerRow.cells.length);
-//         headerCell.textContent = data[0][i];
-//     }
-
-//     // Populate rows with scenario names and input fields
-//     for (var i = 1; i < data.length; i++) {
-//         var rowData = data[i];
-//         var scenarioRow = table.insertRow(i);
-
-//         for (var j = 0; j < rowData.length; j++) {
-//             var dataCell = scenarioRow.insertCell(scenarioRow.cells.length);
-//             dataCell.innerHTML = '<input type="text" value="' + rowData[j] + '">';
-//         }
-//     }
-
-//     tableContainer.appendChild(table);
-// }
-
-
-// var categoryData = getCategoryData();
-    // var scenarioData = getScenarioData();
-    // var valuesData = getValuesTableData();
 
 function saveDataToTSV(categoryData, scenarioData, valuesData) {
 
@@ -678,25 +494,6 @@ function saveDataToTSV(categoryData, scenarioData, valuesData) {
 
     // Convert the data to TSV format
     var tsvContent = allData.map(dataArray => dataArray.map(entry => Object.values(entry).map(value => JSON.stringify(value)).join('\t')).join('\n')).join('\n\n');
-    // tsvContent.join(valuesData.map(dataArray => dataArray.map(entry => Object.values(entry).map(value => JSON.stringify(value)).join('\t')).join('\n')).join('\n\n'));
-        
-
-
-    // var tsvContent = allData.map(dataArray => {
-    //     return dataArray.map(entry => {
-    //         if (Array.isArray(entry)) {
-    //             // For array data (e.g., categoryData and scenarioData)
-    //             console.log("e: ",entry);
-    //             return entry.join('\t');
-    //         } else {
-    //             // For object data (e.g., valuesData)
-    //             return Object.values(entry).map(value => JSON.stringify(value)).join('\t');
-    //         }
-    //     }).join('\n');
-    // }).join('\n\n');
-
-    // var tsvContent = allData.map(dataArray => dataArray.map(entry => Object.values(entry).join('\t')).join('\n')).join('\n\n');
-
     console.log("tsv: ",tsvContent);
 
     // Create a Blob containing the TSV content
@@ -714,48 +511,6 @@ function saveDataToTSV(categoryData, scenarioData, valuesData) {
     // Clean up
     document.body.removeChild(link);
 }
-
-// function loadTSVFile(inputFile, callback) {
-//     var fileReader = new FileReader();
-
-//     fileReader.onload = function (event) {
-//         var content = event.target.result;
-//         var tablesData = content.split('\n\n'); // Assuming each table is separated by two newlines
-
-//         var categoryData = tablesData[0].split('\n').map(row => {
-//             var [categoryName, scoringType, weight, directionToOptimize] = row.split('\t');
-//             return { categoryName, scoringType, weight, directionToOptimize };
-//         });
-
-//         var scenarioData = tablesData[1].split('\n').map(row => {
-//             var [scenarioName] = row.split('\t');
-//             return { scenarioName };
-//         });
-
-//         var valuesData = tablesData[2].split('\n').map(row => {
-//             var columns = row.split('\t');
-//             var scenarioName = columns[0];
-//             var data = {};
-
-//             for (var i = 1; i < columns.length; i++) {
-//                 var categoryName = categoryData[i - 1].categoryName;
-//                 data[categoryName] = columns[i];
-//             }
-
-//             return { [scenarioName]: data };
-//         });
-
-//         callback(categoryData, scenarioData, valuesData);
-
-//         populateCategoryTable(categoryData);
-//         populateScenarioTable(scenarioData);
-//         populateValuesTable(valuesData);
-
-//     };
-
-//     fileReader.readAsText(inputFile);
-// }
-
 
 // Function to populate the Category table
 function populateCategoryTable(data) {
@@ -893,45 +648,6 @@ function populateValuesTable(data) {
     // var submit_button = document.getElementById("temp-submit-button");
     // submit_button.style.display = "block";
     redirectToValuesTable();
-
-
-    
-
-
-
-
-
-
-    
-    // var tableContainer = document.getElementById("table-container");
-    // tableContainer.innerHTML = "";
-
-    // var table = document.createElement("table");
-    // var headerRow = table.insertRow(0);
-    // var firstColNRow = headerRow.insertCell(0);
-    // firstColNRow.textContent = "";
-
-    // var categoryData = getCategoryData();
-    // var scenarioData = getScenarioData();
-
-    // // Populate header cells
-    // for (var i = 0; i < data[0].length; i++) {
-    //     var headerCell = headerRow.insertCell(headerRow.cells.length);
-    //     headerCell.textContent = data[0][i];
-    // }
-
-    // // Populate rows with scenario names and input fields
-    // for (var i = 1; i < data.length; i++) {
-    //     var rowData = data[i];
-    //     var scenarioRow = table.insertRow(i);
-
-    //     for (var j = 0; j < rowData.length; j++) {
-    //         var dataCell = scenarioRow.insertCell(scenarioRow.cells.length);
-    //         dataCell.innerHTML = '<input type="text" value="' + rowData[j] + '">';
-    //     }
-    // }
-
-    // tableContainer.appendChild(table);
 }
 
 // Modify the loadTSVFile function
@@ -988,8 +704,6 @@ function parseTSV(data) {
 
 
 
-
-
 // Example Usage:
 // Assuming you have an input element for file upload like <input type="file" id="fileInput">
 document.getElementById('fileInput').addEventListener('change', function (event) {
@@ -1008,32 +722,61 @@ function uploadFile() {
     document.getElementById('fileInput').click();
 }
 
+
 function plot(totalScores){
     const keys = Object.keys(totalScores);
     console.log("Inplot: ", keys);
     const values = Object.values(totalScores);
     console.log("Inplot: ", values);
     var chart = document.getElementById('chart');
-    var data = [
-        {
-          x: keys,
-          y: values,
-          type: 'bar'
-        }
-      ];
+    var piechart = document.getElementById('pie-chart');
+    
+    // Find the key with the highest value
+    const maxIndex = values.indexOf(Math.max(...values));
+    const recommendedScenario = keys[maxIndex];
+
+    // Display the recommended scenario in a div
+    var bestScenario = document.getElementById('bestScenario');
+    bestScenario.innerHTML = `<h2>Recommended Scenario: ${recommendedScenario}</h2>`;
+    
+    
+
+    var data = values.map((value, index) => ({
+        x: [keys[index]],
+        y: [value],
+        type: 'bar',
+        name: `${keys[index]}`, // Set a unique legend entry for each bar
+        marker: {
+            color: value, // Use the value as the color
+            colorscale: 'Viridis', // You can change the colorscale if needed
+            cmin: Math.min(...values),
+            cmax: Math.max(...values),
+        },
+    }));
+
+    var layout = {
+        title: '<Add Title PLS>',
+        showlegend: true}
     
     //   var myDiv = document.getElementById("myDiv");
       
-    Plotly.newPlot( chart, data);
+    Plotly.newPlot(chart, data, layout, {modeBarButtonsToRemove: [ 'pan','zoom', 'autoscale', 'lasso', 'select', 'resetScale2d']});
+
+    // Scaling and shifting values to the range [0, 100]
+    const scaledValues = values.map(val => (val + 1) * 50);
+
+    var pieChartData = [
+        {
+            labels: keys,
+            values: scaledValues,
+            type: 'pie',
+        }
+    ];
+
+    Plotly.newPlot(piechart, pieChartData, layout);
+
 }
 
-// function backToFirstModalPage(){
-//     var firstModalPage = document.getElementById("firstModalPage");
-//     var secondModalPage = document.getElementById("secondModalPage");
-//     secondModalPage.style.display="none";
-//     firstModalPage.style.display="block";
-    
-// }
 
 function redirectToScenarioTable(){
     var firstModalPage = document.getElementById("firstModalPage");
