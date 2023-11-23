@@ -1,192 +1,187 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <style>
-        body {
-            background-color: #3F5843;
-            font-family: Arial, sans-serif;
-        }
-        table {
-            border-collapse: collapse;
-            width: 60%;
-            margin: 0 auto;
-            color: #333;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(odd) td {
-            background-color: #fff; /* White for odd rows */
-        }
-        tr:nth-child(even) td {
-            background-color: #F7F6FE; /* #F7F6FE for even rows */
-        }
-        select {
-            width: 100%;
-        }
-        .add-button {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .add-button button {
-            background-color: #3F5843;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        .add-button button:hover {
-            background-color: #2D402E;
-        }
-        h1, h2 {
-            text-align: center;
-            color: white;
-        }
-        .submit-button {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .submit-button button {
-            background-color: #3F5843;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        .submit-button button:hover {
-            background-color: #2D402E;
-        }
-        .delete-icon, .clear-icon {
-            cursor: pointer;
-            margin: 0 5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Input Categories</h1>
-    <table>
-        <tr>
-            <th>Category Name</th>
-            <th>Scoring Type</th>
-            <th>Direction to Optimize</th>
-            <th>Action</th>
-        </tr>
-        <tr>
-            <td><input type="text" name="category_name[]"></td>
-            <td>
-                <select name="scoring_type[]">
-                    <option value="number">Number</option>
-                    <option value="descriptive">Descriptive</option>
-                </select>
-            </td>
-            <td>
-                <select name="direction_to_optimize[]">
-                    <option value="up">Up</option>
-                    <option value="down">Down</option>
-                </select>
-            </td>
-            <td>
-                <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-                <span class="clear-icon" onclick="clearRow(this)">🔄</span>
-            </td>
-        </tr>
-    </table>
-    <div class="add-button">
-        <button onclick="addCategoryRow()">Add Category</button>
-    </div>
-    
-    <h1>Input Scenarios</h1>
-    <table>
-        <tr>
-            <th>Scenario Name</th>
-            <th>Scenario Value</th>
-            <th>Action</th>
-        </tr>
-        <tr>
-            <td><input type="text" name="scenario_name[]"></td>
-            <td><input type="number" step="0.01" name="scenario_value[]"></td>
-            <td>
-                <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-                <span class="clear-icon" onclick="clearRow(this)">🔄</span>
-            </td>
-        </tr>
-    </table>
-    <div class="add-button">
-        <button onclick="addScenarioRow()">Add Scenario</button>
-    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="./styleforlanding.css">
+    <script type="module">
+        import { auth, app } from "./auth.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-    <div class="submit-button">
-        <button type="submit">Submit</button>
-    </div>
-
-    <script>
-        function addCategoryRow() {
-            var table = document.querySelector("table");
-            var newRow = table.insertRow(-1);
-
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-            var cell4 = newRow.insertCell(3);
-
-            cell1.innerHTML = '<input type="text" name="category_name[]">';
-            cell2.innerHTML = `
-                <select name="scoring_type[]">
-                    <option value="number">Number</option>
-                    <option value="descriptive">Descriptive</option>
-                </select>`;
-            cell3.innerHTML = `
-                <select name="direction_to_optimize[]">
-                    <option value="up">Up</option>
-                    <option value="down">Down</option>
-                </select>`;
-            cell4.innerHTML = `
-                <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-                <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
+        const checkAuthState = async () => {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    // login_container.style.display = 'none';
+                    // window.location.href = "category.html";
+                    // // secretContent.style.display = 'block';
+                }
+                else {
+                    window.location.href = "index.html";
+                }
+            })
         }
 
-        function addScenarioRow() {
-            var table = document.querySelectorAll("table")[1];
-            var newRow = table.insertRow(-1);
+        checkAuthState();
 
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-
-            cell1.innerHTML = '<input type="text" name="scenario_name[]">';
-            cell2.innerHTML = '<input type="number" step="0.01" name="scenario_value[]">';
-            cell3.innerHTML = `
-                <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
-                <span class="clear-icon" onclick="clearRow(this)">🔄</span>`;
+        const userSignOut = async () => {
+            await signOut(auth);
         }
 
-        function deleteRow(element) {
-            var row = element.parentElement.parentElement;
-            row.parentNode.removeChild(row);
-        }
-
-        function clearRow(element) {
-            var row = element.parentElement.parentElement;
-            var inputs = row.querySelectorAll('input');
-            for (var input of inputs) {
-                input.value = '';
-            }
-        }
+        signOutButton.addEventListener('click', userSignOut);
     </script>
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+</head>
+
+<body>
+    
+    
+<!-- 
+    <div class="scroll-down">
+        
+    
+    </div> -->
+      <div class= 'container'>
+        <div class="btns-signout">
+            <button id="signOutButton" class="btns_more_signout">Sign Out</button>
+        </div>
+        <div class="container_content">
+            <div class="container_content_inner">
+            <div class="title">
+                <h1 class="Head1">Toodaloo</h1>
+            </div>
+            <div class="par">
+                <p>
+                    Introducing Toodaloo, a groundbreaking application designed to empower businesses and local governments in making informed decisions with a holistic perspective. By leveraging Toodaloo, organizations can enhance their commitment to sustainability, responsible resource management, and community well-being. Join us in redefining the way decisions are made, as Toodaloo paves the way for a more conscientious and impactful approach to business and governance.
+                </p>
+            </div>
+            <div class="btns">
+                <button class="modal-button">Click to Begin</button>
+                <input type="file" id="fileInput" style="display: none;">
+                <button onclick="uploadFile()" id="upload" class="modal-button">Upload File</button>
+            </div>
+            </div>
+        </div>
+        <div class="container_outer_img">
+            <div class="img-inner">
+            <img src='https://images.unsplash.com/photo-1517911041065-4960862d38f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80'  alt="" class="container_img"/>
+            </div>
+        </div>
+        </div>
+    <div class="overlay"></div>
+
+
+      <div class="modal">
+        <div class="modal-container">
+          <div class="modal-left" id="firstModalPage">
+            <h1 style="text-align: center;">Input Categories</h1>
+                <table class="flat-table">
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Scoring Type</th>
+                        <th>Weight</th>
+                        <th>Direction to Optimize</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="category_name[]"></td>
+                        <td>
+                            <select name="scoring_type[]">
+                                <option value="number">Number</option>
+                                <option value="descriptive">Descriptive</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="weight[]" placeholder="Remaining: 1.00" oninput="updateRemainingWeight(this)">
+                            <span class="error-message" style="font-size: 10px;"></span>
+                        </td>
+                        <td>
+                            <select name="direction_to_optimize[]">
+                                <option value="up">Up</option>
+                                <option value="down">Down</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+                            <span class="clear-icon" onclick="clearRow(this)">🔄</span>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <button class="add-button" onclick="addCategoryRow()">Add Category</button>
+                    <!-- <button onclick="openMe()">Click Me</button> -->
+                    <button style="float: right;" class="add-button" onclick="redirectToScenarioTable(this)">Continue</button>
+                </div>
+            </div>
+            <div id="secondModalPage" style="display: none;" class="modal-left">
+        
+                <h1 style="text-align: center;">Input Scenarios</h1>
+                <table style="margin-left: auto; margin-right: auto;">
+                    <tr>
+                        <th>Scenario Name</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="scenario_name[]"></td>
+                        <td>
+                            <span class="delete-icon" onclick="deleteRow(this)">🗑️</span>
+                            <span class="clear-icon" onclick="clearRow(this)">🔄</span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="scenario">
+                    <button class="add-button" onclick="addScenarioRow()">Add Scenario</button>
+                </div>
+                <div style="margin-top: 20px;" class="continue">
+                    <button class="add-button" onclick="redirectBackToCategoryTable(this)">Back</button>
+                    <button style="float: right;" class="add-button" onclick="valueTable()">Continue</button>
+                </div>
+        
+            </div>
+            <div style="display: none;" class="modal-left" id="thirdModalWindow">
+                <h1>Input Values</h1>
+                <div style="margin-left: auto;margin-right: auto;" id="table-container" ></div>
+                <div style="margin-top: 20px;" class="continue">
+                    <button class="add-button" onclick="calculateScore()">Submit</button>
+                    <button style="float: right;" class="add-button" onclick="redirectBackToScenarioTable(this)">Back</button>
+                </div>
+            </div>
+
+            <div style="display: none;" class="modal-left" id="fourthModalWindow">
+                <div id="bestScenario"></div>
+                <div id='chart'></div>
+                <div id="pie-chart"></div>
+                <div class="continue">
+                    <button class="add-button" onclick="redirectBackToValuesTable()">Back</button>
+                    <button class="add-button" style="float: right;" onclick="saveDataToTSV()">Save</button>
+                </div>
+            </div>
+            
+
+        <button class="icon-button close-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+            <path d="M 25 3 C 12.86158 3 3 12.86158 3 25 C 3 37.13842 12.86158 47 25 47 C 37.13842 47 47 37.13842 47 25 C 47 12.86158 37.13842 3 25 3 z M 25 5 C 36.05754 5 45 13.94246 45 25 C 45 36.05754 36.05754 45 25 45 C 13.94246 45 5 36.05754 5 25 C 5 13.94246 13.94246 5 25 5 z M 16.990234 15.990234 A 1.0001 1.0001 0 0 0 16.292969 17.707031 L 23.585938 25 L 16.292969 32.292969 A 1.0001 1.0001 0 1 0 17.707031 33.707031 L 25 26.414062 L 32.292969 33.707031 A 1.0001 1.0001 0 1 0 33.707031 32.292969 L 26.414062 25 L 33.707031 17.707031 A 1.0001 1.0001 0 0 0 32.980469 15.990234 A 1.0001 1.0001 0 0 0 32.292969 16.292969 L 25 23.585938 L 17.707031 16.292969 A 1.0001 1.0001 0 0 0 16.990234 15.990234 z"></path>
+            </svg>
+        </button>
+        
+        
+      </div>
+      
+      <div id="signOut" style="padding: 5% 10%;">
+        
+    </div> 
+      <!-- partial -->
+    <!-- <script  src="./script1.js"></script> -->
+    <script src="app.js"></script>
+    
+
+
 </body>
+
 </html>
+
