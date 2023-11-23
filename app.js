@@ -622,16 +622,24 @@ function populateValuesTable(data) {
         for (var j = 0; j < categoryData.length; j++) {
             var categoryCell = scenarioRow.insertCell(scenarioRow.cells.length);
             if(categoryData[j].scoringType === 'descriptive'){
+                console.log("Here:",dataArr[i][j]);
                 var select = document.createElement("select");
                 select.name = 'scenario_value';
                 var descriptiveOptions = ['low', 'low-mid', 'mid', 'mid-high', 'high'];
                 for (var option of descriptiveOptions) {
                     var optionElement = document.createElement('option');
-                    optionElement.value = dataArr[i][j];
+                    optionElement.value = option;
                     optionElement.textContent = option;
+                    
+                    if (option === dataArr[i][j]) {
+                        console.log(option,"==", dataArr[i][j]);
+                        optionElement.selected = true;
+                    }
                     select.appendChild(optionElement);
                 }
+
                 categoryCell.appendChild(select);
+
             }
             else{
                 var input = document.createElement("input");
