@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toodaloo</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <script type="module">
+        import { app, auth } from './auth.js';
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+
+        const signInForm = document.getElementById('signInForm');
+        // const registerForm = document.getElementById('registerForm');
+        
+
+        const signInemail = document.getElementById("signInEmail");
+        const signInpassword = document.getElementById("signInPassword");
+        const registerEmail = document.getElementById("registerEmail");
+        const registerPassword = document.getElementById("registerPassword");
+        const registerConfirmPassword = document.getElementById("registerConfirmPassword");
+
+        // Function to validate the email
+        const validateEmail = (inputEmail) => inputEmail.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+        // Function to validate password
+        const validatePassword = (inputPassword) => inputPassword.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/);
+        const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
+        const emailErrorRegister = document.getElementById("emailErrorRegister");
+        const passwordErrorRegister = document.getElementById("passwordErrorRegister");
+        const confirmPasswordErrorRegister = document.getElementById('confirmPasswordErrorRegister');
+
+
+        // Function used to display errors
+        const generateError = (errorName, errorMsg, sigInOrReg) => {
+            if (sigInOrReg == "signIn") {
+
+                if (errorName == "email") {
+                    emailError.innerText = errorMsg;
+                    emailError.style.color = "red";
+                } else if (errorName == "password") {
+                    passwordError.innerText = errorMsg;
+                    passwordError.style.color = "red";
+                }
+            }
+            else if (sigInOrReg == "register") {
+
+                if (errorName == "email") {
+                    emailErrorRegister.innerText = errorMsg;
+                    emailErrorRegister.style.color = "red";
+                } else if (errorName == "password") {
+                    passwordErrorRegister.innerText = errorMsg;
+                    passwordErrorRegister.style.color = "red";
+                } else if (errorName == "confirmPassword") {
+                    confirmPasswordErrorRegister.innerText = errorMsg;
+                    confirmPasswordErrorRegister.style.color = "red";
+                }
+            }
+
+
+        }
+
+        // Focusout event listener. Triggers when the user clicks anywhere else besides the input
+        signInemail.addEventListener("focusout", (e) => {
+            if (!validateEmail(signInemail)) {
+                signInemail.style.borderColor = "red";
+                generateError("email", "Please enter a valid email", "signIn");
+                signInemail.parentElement.classList.add("error");
+            } else {
+                signInemail.style.borderColor = "black";
+                emailError.innerText = "";
+            }
+        });
+
+        // Focusout event listener triggers when the user clicks anywhere else besides the input
+        signInpassword.addEventListener("focusout", (e) => {
+            if (!validatePassword(signInpassword)) {
+                signInpassword.style.borderColor = "red";
+                generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "signIn");
+                signInpassword.parentElement.classList.add("error");
+            } else {
+                signInpassword.style.borderColor = "black";
+                passwordError.innerText = "";
+            }
+        });
+
+
+        registerEmail.addEventListener("focusout", (e) => {
+            if (!validateEmail(registerEmail)) {
+                registerEmail.style.borderColor = "red";
+                generateError("email", "Please enter a valid email", "register");
+                registerEmail.parentElement.classList.add("error");
+            } else {
+                registerEmail.style.borderColor = "black";
+                emailErrorRegister.innerText = "";
+            }
+        });
+
+        // Focusout event listener triggers when the user clicks anywhere else besides the input
+        registerPassword.addEventListener("focusout", (e) => {
+            if (!validatePassword(registerPassword)) {
+                registerPassword.style.borderColor = "red";
+                generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "register");
+                registerPassword.parentElement.classList.add("error");
+            } else {
+                registerPassword.style.borderColor = "black";
+                passwordErrorRegister.innerText = "";
+            }
+        });
+
+        // Focusout event listener triggers when the user clicks anywhere else besides the input
+        registerConfirmPassword.addEventListener("focusout", (e) => {
+            if (registerPassword.value != registerConfirmPassword.value) {
+                registerConfirmPassword.style.borderColor = "red";
+                generateError("confirmPassword", "Password not identical", "register");
+                registerConfirmPassword.parentElement.classList.add("error");
+            } else {
+                registerConfirmPassword.style.borderColor = "black";
+                confirmPasswordErrorRegister.innerText = "";
+            }
+        });
+
+        const checkAuthState = async () => {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    // login_container.style.display = 'none';
+                    window.location.href = "category.html";
+                    // secretContent.style.display = 'block';
+
+                }
+                else {
+                    //signInForm.style.display = 'block';
+                    // login_container.style.display = 'block';
+                    // secretContent.style.display = 'none';
+
+                }
+            })
+        }
+
+        checkAuthState();
+
+
+        signInForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signInEmail');
+            const password = document.getElementById('signInPassword');
+
+
+            if (!validateEmail(email)) {
+                // alert('Please enter a valid email');
+                generateError("email", "Please enter a valid email", "signIn");
+                return;
+            }
+            if (!validatePassword(password)) {
+                // alert('Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character');
+                generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "signIn");
+                return;
+            }
+
+
+            signInWithEmailAndPassword(auth, email.value, password.value)
+                .then((userCredential) => {
+
+                    const user = userCredential.user;
+                    alert('Sign in successful!');
+                    window.location.href = "category.html";
+
+                })
+                .catch((error) => {
+
+                    const errorMessage = "Email Id or password is incorrect!";
+                    alert(`Sign in failed: ${errorMessage}`)
+                    generateError("password", errorMessage);
+                });
+        });
+
+
+
+        // registerForm.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     const email = document.getElementById('registerEmail');
+        //     const password = document.getElementById('registerPassword');
+        //     const confirmPassword = document.getElementById('registerConfirmPassword');
+
+        //     if (!validateEmail(email)) {
+        //         // alert('Please enter a valid email');
+        //         generateError("email", "Please enter a valid email", "register");
+        //         return;
+        //     }
+        //     if (!validatePassword(password)) {
+        //         // alert('Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character');
+        //         generateError("password", "Password must be of length 6 with atleast 1 Capital Letter, 1 Number, 1 Special Character", "register");
+        //         return;
+        //     }
+        //     if (password.value != confirmPassword.value) {
+        //         generateError("confirmPassword", "Password not identical", "register")
+        //         return
+        //     }
+
+        //     createUserWithEmailAndPassword(auth, email.value, confirmPassword.value)
+        //         .then((userCredential) => {
+
+        //             const user = userCredential.user;
+        //             alert('Registration successful!');
+
+        //         })
+        //         .catch((error) => {
+
+        //             const errorMessage = "Error - Email already exists";
+        //             generateError("password", errorMessage, "register");
+        //         });
+        // });
+    </script>
+
+
+    <!-- partial:index.partial.html -->
+<!-- partial:index.partial.html -->
+<div id="container" class="container">
+    <!-- FORM SECTION -->
+    <div class="row">
+        <!-- SIGN UP -->
+        <div class="col align-items-center flex-col sign-up">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-up">
+                    <form id="signUpForm">
+                        <div class="input-group">
+                            <i class='bx bx-mail-send'></i>
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" class="input-field" required>
+                            <p id="emailErrorRegister"></p>
+                        </div>
+                        <div class="input-group">
+                            <i class='bx bxs-lock-alt'></i>
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" class="input-field" required>
+                            <p id="passwordErrorRegister"></p>
+                        </div>
+                        <div class="input-group">
+                            <i class='bx bxs-lock-alt'></i>
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" class="input-field" required>
+                            <p id="confirmPasswordErrorRegister"></p>
+                        </div>
+                        <button type="submit" class="btn-register">Sign Up</button>
+                        <p>
+                            <span>
+                                Already have an account?
+                            </span>
+                            <b onclick="toggle()" class="pointer">
+                                Sign in here
+                            </b>
+                        </p>
+                    </form>    
+                </div>
+            </div>
+        
+        </div>
+        <!-- END SIGN UP -->
+        <!-- SIGN IN -->
+        <div class="col align-items-center flex-col sign-in">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-in">
+                    <form id="signInForm">
+                        <div class="input-group">
+                            <i class='bx bxs-user'></i>
+                            <label for="signInEmail">Email</label>
+                            <input type="email" id="signInEmail" class="input-field" required>
+                            <p id="emailError"></p>
+                        </div>
+                        <div class="input-group">
+                            <i class='bx bxs-lock-alt'></i>
+                            <label for="signInPassword">Password</label>
+                            <input type="password" id="signInPassword" class="input-field" required>
+                            <p id="passwordError"></p>
+                        </div>
+                        <button type="submit" class="btn-register">Sign In</button>
+                        <p>
+                            <b>
+                                Forgot password?
+                            </b>
+                        </p>
+                        <p>
+                            <span>
+                                Don't have an account?
+                            </span>
+                            <b onclick="toggle()" class="pointer">
+                                Sign up here
+                            </b>
+                        </p>
+                    </form>    
+                </div>
+            </div>
+            <div class="form-wrapper">
+    
+            </div>
+        </div>
+        <!-- END SIGN IN -->
+    </div>
+    <!-- END FORM SECTION -->
+    <!-- CONTENT SECTION -->
+    <div class="row content-row">
+        <!-- SIGN IN CONTENT -->
+        <div class="col align-items-center flex-col">
+            <div class="text sign-in">
+                <h2>
+                    Welcome
+                </h2>
+
+            </div>
+            <div class="img sign-in">
+    
+            </div>
+        </div>
+        <!-- END SIGN IN CONTENT -->
+        <!-- SIGN UP CONTENT -->
+        <div class="col align-items-center flex-col">
+            <div class="img sign-up">
+            
+            </div>
+            <div class="text sign-up">
+                <h2>
+                    Join Us
+                </h2>
+
+            </div>
+        </div>
+        <!-- END SIGN UP CONTENT -->
+    </div>
+    <!-- END CONTENT SECTION -->
+</div>
+<!-- partial -->
+<script  src="./script.js"></script>
+
+
+
+
+</body>
+
+</html>
