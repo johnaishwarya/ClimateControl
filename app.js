@@ -2,6 +2,8 @@
 let openOrNew = "New";
 let VTABLE = null;
 
+let scenarioDimScore={};
+
 //ForModalWindow
 
 const body = document.querySelector("body");
@@ -16,6 +18,16 @@ var firstModalPage = document.getElementById("firstModalPage");
 var secondModalPage = document.getElementById("secondModalPage");
 var thirdModalWindow = document.getElementById("thirdModalWindow");
 var fourthModalWindow = document.getElementById("fourthModalWindow");
+
+
+let descriptiveValueMap = {
+    'low': 2,
+    'low-mid': 4,
+    'mid': 6,
+    'mid-high': 8,
+    'high': 10
+};
+
 
 const openModal = () => {
     
@@ -378,16 +390,45 @@ function valueTable(){
 
 
 function mapDescriptiveToInteger(value) {
-    var descriptiveValueMap = {
-        'low': 2,
-        'low-mid': 4,
-        'mid': 6,
-        'mid-high': 8,
-        'high': 10
-    };
-
     return descriptiveValueMap[value] || 0; // Default to 0 if the value is not found in the map
 }
+
+function mapToIntval(value) {
+    
+    return descriptiveValueMap[value]; 
+}
+
+function replaceDescriptiveValues(data) {
+    return data.map(obj => {
+        for (let key in obj) {
+            for (let prop in obj[key]) {
+                if (descriptiveValueMap.hasOwnProperty(obj[key][prop])) {
+                    obj[key][prop] = mapToIntval(obj[key][prop]);
+                }
+            }
+        }
+        return obj;
+    });
+}
+
+function minAndMaxValue(data){
+        
+    const categories = Object.keys(data[0][Object.keys(data[0])[0]]);
+
+    const result = {};
+
+    categories.forEach(category => {
+    const values = data.map(item => Object.values(item)[0][category]);
+    result[category] = {
+        min: Math.min(...values),
+        max: Math.max(...values)
+    };
+    });
+
+    console.log("this is the min and max values: ", result)
+    return result;
+}
+
 
 function calculateScore() {
     var categoryData = getCategoryData();
@@ -398,6 +439,8 @@ function calculateScore() {
     console.log(categoryData)
     console.log(scenarioData)
     console.log(valuesData)
+    
+    console.log("P: ", minMaxValues);
 
     for (var category of categoryData) {
         var categoryName = category.categoryName;
@@ -406,25 +449,36 @@ function calculateScore() {
         console.log("categoryName: ", categoryName);
         console.log("categoryWeight: ", categoryWeight);
         console.log("directionToOptimize: ", directionToOptimize);
+        console.log("Cat:", category)
+        console.log("Val:", valuesData);
 
         // Find min and max values for the category
-        var min = Number.MAX_VALUE;
-        var max = Number.MIN_VALUE;
-        var i=0;
-        for (var scenario of valuesData) {
-            var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
-            if (!isNaN(value)) {
-                if (value < min) {
-                    min = value;
-                }
-                if (value > max) {
-                    max = value;
-                }
-            }
-            i++;
-        }
+        // var min = Number.MAX_VALUE;
+        // var max = Number.MIN_VALUE;
+        // var i=0;
+        // for (var scenario of valuesData) {
+        //     var value = parseFloat(scenario[Object.keys(scenario)[0]][categoryName]);
+        //     if (!isNaN(value)) {
+        //         if (value < min) {
+        //             min = value;
+        //         }
+        //         if (value > max) {
+        //             max = value;
+        //         }
+        //     }
+        //     i++;
+        // }
+
         
-        console.log("min: ", min, " max :", max);
+        newValData = replaceDescriptiveValues(valuesData);
+        console.log("NewValData: ", newValData);
+        
+        var minMaxValues = minAndMaxValue(valuesData);
+        min = minMaxValues[category.categoryName].min;
+        max = minMaxValues[category.categoryName].max;
+
+        console.log("CategorY: ", category.categoryName,"Min:", min, " Max: ", max);
+        // console.log("min: ", min, " max :", max);
 
         // Calculate linear scores for each scenario in this category
         for (var scenario of scenarioData) {
@@ -439,7 +493,12 @@ function calculateScore() {
             console.log("s: ", scenarioName, "value: ", value);
             
 
+            
+
             if (!isNaN(value)) {
+                scenarioDimScore[scenarioName] = scenarioDimScore[scenarioName] || {};
+                scenarioDimScore[scenarioName][categoryName] = categoryWeight*((min - value) / (max - min))
+                console.log("CategoryName: ", categoryName, "categoryWeight: ", categoryWeight, "value: ",value, "DimVal: ", scenarioDimScore[scenarioName][categoryName]);
                 if (directionToOptimize === 'down') {
                     // Minimize the linear score
                     dimensionlessScores[scenarioName] = dimensionlessScores[scenarioName] || {};
@@ -454,7 +513,7 @@ function calculateScore() {
     }
 
     // After calculation, the valuesData object now contains the calculated linear scores.
-    console.log(dimensionlessScores);
+    console.log("DIM:", dimensionlessScores);
     var totalScores = totalScoreForEachScenario(dimensionlessScores);
     plot(totalScores);
     redirectToGraphs();
@@ -738,6 +797,7 @@ function plot(totalScores){
     console.log("Inplot: ", values);
     var chart = document.getElementById('chart');
     var piechart = document.getElementById('pie-chart');
+    var barchart = document.getElementById('bar-chart');
     
     // Find the key with the highest value
     const maxIndex = values.indexOf(Math.max(...values));
@@ -746,6 +806,9 @@ function plot(totalScores){
     // Display the recommended scenario in a div
     var bestScenario = document.getElementById('bestScenario');
     bestScenario.innerHTML = `<h2>Recommended Scenario: ${recommendedScenario}</h2>`;
+
+    console.log("Result: ", scenarioDimScore);
+    console.log("Result: ", Object.keys(scenarioDimScore));
     
     
 
@@ -763,7 +826,7 @@ function plot(totalScores){
     }));
 
     var layout = {
-        title: '<Add Title PLS>',
+        title: 'Scenario Ranking - Bar Chart',
         showlegend: true}
     
     //   var myDiv = document.getElementById("myDiv");
@@ -781,7 +844,65 @@ function plot(totalScores){
         }
     ];
 
+    var layout = {
+        title: 'Scenario Ranking - Pie Chart',
+        showlegend: true}
+
     Plotly.newPlot(piechart, pieChartData, layout);
+
+    var xValues = Object.keys(scenarioDimScore.Bike); // Assuming all objects have the same keys
+    var traces = [];
+
+    // Create traces dynamically
+    for (var key in scenarioDimScore) {
+    if (scenarioDimScore.hasOwnProperty(key)) {
+        var trace = {
+        x: xValues,
+        y: xValues.map(function (quality) {
+            return scenarioDimScore[key][quality];
+        }),
+        name: key,
+        type: 'bar'
+        };
+        traces.push(trace);
+    }
+    }
+
+    console.log("Traces: ", traces)
+
+    // Create layout
+    var layout = { title: 'Dimensionless Score of each Category',barmode: 'group' };
+
+    Plotly.newPlot(barchart, traces, layout, {modeBarButtonsToRemove: [ 'pan','zoom', 'autoscale', 'lasso', 'select', 'resetScale2d']});
+
+
+    var categories = Object.keys(scenarioDimScore.Bike);
+
+    var stackChart = document.getElementById('stack-chart');
+
+    // Initialize an array to store traces
+    var traces = [];
+
+    // Create traces dynamically for each category
+    categories.forEach(function (category) {
+    var trace = {
+        x: Object.keys(scenarioDimScore),
+        y: Object.values(scenarioDimScore).map(function (vehicle) {
+        return vehicle[category];
+        }),
+        name: category,
+        type: 'bar'
+    };
+    traces.push(trace);
+    });
+
+    console.log("StackTraces: ", traces);
+
+    // Create layout
+    var layout = { title: 'Dimensionless Score of each Scenario',barmode: 'stack' };
+
+    // Plot the chart
+    Plotly.newPlot(stackChart, traces, layout, {modeBarButtonsToRemove: [ 'pan','zoom', 'autoscale', 'lasso', 'select', 'resetScale2d']});
 
 }
 
